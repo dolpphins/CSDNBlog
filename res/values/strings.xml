@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">CSDN_Blog</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    
+    <!-- Tab选项卡 -->
+    <string name="blog">博客</string>
+    <string name="column">专栏</string>
+    <string name="experts">博客专家</string>
+    <string name="personality">个人中心</string>
+    
+    <!-- 博客导航条 -->
+    <string name="mobile_development">移动开发</string>
+    <string name="Web">Web前端</string>
+    <string name="framework_design">架构设计</string>
+    <string name="programming_languages">编程语言</string>
+    <string name="internet">互联网</string>
+    <string name="database">数据库</string>
+    <string name="system_operation">系统运维</string>
+    <string name="cloud_computing">云计算</string>
+    <string name="research_development_management">研发管理</string>
+	<string name="synthesize">综合</string>
+	
+	<string name="detail">正文</string>
+
+</resources>

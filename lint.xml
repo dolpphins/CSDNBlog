@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="NewApi">
+        <ignore path="src/com/example/csdn_blog/MainActivity.java" />
+        <ignore path="src/com/example/network/BlogDetailAsyncTask.java" />
+        <ignore path="src/com/example/util/NewsListViewAdapter.java" />
+    </issue>
+</lint>
