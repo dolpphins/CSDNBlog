@@ -71,6 +71,46 @@ public class MainActivity extends Activity {
 	private BlogNews webBlogNews;
 	private String webBaseUrlString = "http://blog.csdn.net/web/index.html";
 	private String webCacheFileName = "web";
+	//架构设计
+	private PullToRefreshListView frameworkNewsListView = null;
+	private BlogNews frameworkBlogNews;
+	private String frameworkBaseUrlString = "http://blog.csdn.net/enterprise/index.html";
+	private String frameworkCacheFileName = "framework";
+	//编程语言
+	private PullToRefreshListView programmingNewsListView = null;
+	private BlogNews programmingBlogNews;
+	private String programmingBaseUrlString = "http://blog.csdn.net/code/index.html";
+	private String programmingCacheFileName = "programming";
+	//互联网
+	private PullToRefreshListView internetNewsListView = null;
+	private BlogNews internetBlogNews;
+	private String internetBaseUrlString = "http://blog.csdn.net/www/index.html";
+	private String internetCacheFileName = "internet";
+	//数据库
+	private PullToRefreshListView databaseNewsListView = null;
+	private BlogNews databaseBlogNews;
+	private String databaseBaseUrlString = "http://blog.csdn.net/database/index.html";
+	private String databaseCacheFileName = "database";
+	//系统运维
+	private PullToRefreshListView systemNewsListView = null;
+	private BlogNews systemBlogNews;
+	private String systemBaseUrlString = "http://blog.csdn.net/system/index.html";
+	private String systemCacheFileName = "database";
+	//云计算
+	private PullToRefreshListView cloudNewsListView = null;
+	private BlogNews cloudBlogNews;
+	private String cloudBaseUrlString = "http://blog.csdn.net/cloud/index.html";
+	private String cloudCacheFileName = "cloud";
+	//研发管理
+	private PullToRefreshListView researchNewsListView = null;
+	private BlogNews researchBlogNews;
+	private String researchBaseUrlString = "http://blog.csdn.net/software/index.html";
+	private String researchCacheFileName = "research";
+	//综合
+	private PullToRefreshListView synthesizeNewsListView = null;
+	private BlogNews synthesizeBlogNews;
+	private String synthesizeBaseUrlString = "http://blog.csdn.net/other/index.html";
+	private String synthesizeCacheFileName = "synthesize";
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,8 +129,16 @@ public class MainActivity extends Activity {
         //初始化其它控件(如pulltorefresh等)
         initOther();
         //初始化各个对象
-        mobileBlogNews = new BlogNews(this, mobileNewsListView,mobileBaseUrlString,mobileCacheFileName,currentViewPageeIndex);
-        webBlogNews = new BlogNews(this, webNewsListView,webBaseUrlString,webCacheFileName,currentViewPageeIndex);
+        mobileBlogNews = new BlogNews(this, mobileNewsListView,mobileBaseUrlString,mobileCacheFileName,0);
+        webBlogNews = new BlogNews(this, webNewsListView,webBaseUrlString,webCacheFileName,1);
+        frameworkBlogNews = new BlogNews(this, frameworkNewsListView,frameworkBaseUrlString,frameworkCacheFileName,2);
+        programmingBlogNews = new BlogNews(this, programmingNewsListView,programmingBaseUrlString,programmingCacheFileName,3);
+        internetBlogNews = new BlogNews(this, internetNewsListView,internetBaseUrlString,internetCacheFileName,4);
+        databaseBlogNews = new BlogNews(this, databaseNewsListView,databaseBaseUrlString,databaseCacheFileName,5);
+        systemBlogNews = new BlogNews(this, systemNewsListView,systemBaseUrlString,systemCacheFileName,6);
+        cloudBlogNews = new BlogNews(this, cloudNewsListView,cloudBaseUrlString,cloudCacheFileName,7);
+        researchBlogNews = new BlogNews(this, researchNewsListView,researchBaseUrlString,researchCacheFileName,8);
+        synthesizeBlogNews = new BlogNews(this, synthesizeNewsListView,synthesizeBaseUrlString,synthesizeCacheFileName,9);
     }
     /**
      * 
@@ -286,6 +334,14 @@ public class MainActivity extends Activity {
     {
     	mobileNewsListView = (PullToRefreshListView) blogPagerViews.get(0).findViewById(R.id.newsListView);
     	webNewsListView = (PullToRefreshListView) blogPagerViews.get(1).findViewById(R.id.newsListView);
+    	frameworkNewsListView = (PullToRefreshListView) blogPagerViews.get(2).findViewById(R.id.newsListView);
+    	programmingNewsListView = (PullToRefreshListView) blogPagerViews.get(3).findViewById(R.id.newsListView);
+    	internetNewsListView = (PullToRefreshListView) blogPagerViews.get(4).findViewById(R.id.newsListView);
+    	databaseNewsListView = (PullToRefreshListView) blogPagerViews.get(5).findViewById(R.id.newsListView);
+    	systemNewsListView = (PullToRefreshListView) blogPagerViews.get(6).findViewById(R.id.newsListView);
+    	cloudNewsListView = (PullToRefreshListView) blogPagerViews.get(7).findViewById(R.id.newsListView);
+    	researchNewsListView = (PullToRefreshListView) blogPagerViews.get(8).findViewById(R.id.newsListView);
+    	synthesizeNewsListView = (PullToRefreshListView) blogPagerViews.get(9).findViewById(R.id.newsListView);
     }
     
     @Override
@@ -302,6 +358,47 @@ public class MainActivity extends Activity {
 		{
 			if(webBlogNews != null) webBlogNews.handleForReadBlog(data);
 		}
+		//从架构设计博客正文返回
+		else if(requestCode == 2 && resultCode == 100 && null != data)
+		{
+			if(frameworkBlogNews != null) frameworkBlogNews.handleForReadBlog(data);
+		}
+		//从编程语言博客正文返回
+		else if(requestCode == 3 && resultCode == 100 && null != data)
+		{
+			if(programmingBlogNews != null) programmingBlogNews.handleForReadBlog(data);
+		}
+		//从互联网博客正文返回
+		else if(requestCode == 4 && resultCode == 100 && null != data)
+		{
+			if(internetBlogNews != null) internetBlogNews.handleForReadBlog(data);
+		}
+		//从数据库博客正文返回
+		else if(requestCode == 5 && resultCode == 100 && null != data)
+		{
+			if(databaseBlogNews != null) databaseBlogNews.handleForReadBlog(data);
+		}
+		//从系统运维博客正文返回
+		else if(requestCode == 6 && resultCode == 100 && null != data)
+		{
+			if(systemBlogNews != null) systemBlogNews.handleForReadBlog(data);
+		}
+		//从云计算博客正文返回
+		else if(requestCode == 7 && resultCode == 100 && null != data)
+		{
+			if(cloudBlogNews != null) cloudBlogNews.handleForReadBlog(data);
+		}
+		//从研发管理博客正文返回
+		else if(requestCode == 8 && resultCode == 100 && null != data)
+		{
+			if(researchBlogNews != null) researchBlogNews.handleForReadBlog(data);
+		}
+		//从综合博客正文返回
+		else if(requestCode == 5 && resultCode == 100 && null != data)
+		{
+			if(synthesizeBlogNews != null) synthesizeBlogNews.handleForReadBlog(data);
+		}
+		
 		super.onActivityResult(requestCode, resultCode, data);
 	}
     
@@ -312,6 +409,14 @@ public class MainActivity extends Activity {
 			//将最新的缓存保存到文件中
 			if(mobileBlogNews != null) mobileBlogNews.saveCacheToFile();
 			if(webBlogNews != null) webBlogNews.saveCacheToFile();
+			if(frameworkBlogNews != null) frameworkBlogNews.saveCacheToFile();
+			if(programmingBlogNews != null) programmingBlogNews.saveCacheToFile();
+			if(internetBlogNews != null) internetBlogNews.saveCacheToFile();
+			if(databaseBlogNews != null) databaseBlogNews.saveCacheToFile();
+			if(systemBlogNews != null) systemBlogNews.saveCacheToFile();
+			if(cloudBlogNews != null) cloudBlogNews.saveCacheToFile();
+			if(researchBlogNews != null) researchBlogNews.saveCacheToFile();
+			if(synthesizeBlogNews != null) synthesizeBlogNews.saveCacheToFile();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
