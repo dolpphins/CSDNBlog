@@ -29,5 +29,6 @@ public class BlogOnPageChangeListener implements OnPageChangeListener {
 	@Override
 	public void onPageSelected(int index) {
 		((MainActivity)context).changeNavigationItem(index);
+		((MainActivity)context).currentViewPageeIndex = index;
 	}
 }

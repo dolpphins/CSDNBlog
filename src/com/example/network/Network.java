@@ -18,7 +18,8 @@ import android.net.NetworkInfo;
 import android.util.Log;
 
 /**
- * 网络工具类
+ * 网络类
+ * 
  * */
 public class Network {
 	private static final String tag = "Network";
@@ -48,21 +49,22 @@ public class Network {
 	}
 	/**
 	 * 获取网络数据并解析
+	 * 
+	 * @param urlString 要获取的数据的地址
+	 * 
+	 * @return 如果获取并解析成功返回一个列表，失败返回null
+	 * 
+	 * @see parseData
+	 * 
 	 * */
-	public static List<News> getData(String urlString)
+	public List<News> getData(String urlString)
 	{
 		List<News> newsList = null;
 		try
 		{
-			//HttpGet httpGet = new HttpGet(urlString);
-			//HttpClient httpClient = new DefaultHttpClient();
-			//HttpResponse httpResponse = httpClient.execute(httpGet);
-			//HttpEntity httpEntity = httpResponse.getEntity();
-			
 			URL url = new URL(urlString);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			InputStream inputStream = con.getInputStream();
-			//InputStream inputStream = httpEntity.getContent();
 			BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 			String html = "";
 			String line = "";
@@ -82,34 +84,21 @@ public class Network {
 	}
 	/**
 	 * 解析网络数据
+	 * 
+	 * @param html 要解析的html源代码
+	 * 
+	 * @return 解析成功返回一个集合，失败返回null
+	 * 
 	 * */
-	public static List<News> parseData(String html)
+	public List<News> parseData(String html)
 	{
 		try
 		{
 			List<News> newsList = new ArrayList<News>();
 			int i,count;
-
-			//解析博客园html
-			/*int start = html.indexOf("<div id=\"pager_top\" style=\"display:none\"></div>");
-			int end = html.indexOf("<script>editorPickStat();aggSite.user.getUserInfo();</script>");
-			//System.out.println("start:"+start);
-			//System.out.println("end:"+end);
-			String str1 = html.substring(start, end);
-			Log.i(tag,"str1 -->\n"+str1);
-			String[] strArray = str1.split("<div class=\"post_item_body\">");
-			
-			Pattern patternSrc = Pattern.compile("(?<=src=\")(.*?)(?=\")");
-			Pattern patternTitle = Pattern.compile("(?<=target=\"_blank\">)(.*?)(?=</a></h3>)");
-			Pattern patternSummmary = Pattern.compile("(?<=alt=\"\"/></a>)(.*?)(?=</p>)");
-			Pattern patternTextUrl = Pattern.compile("(?<=href=\")(.*?)(?=\")");
-			Pattern patternAuthor = Pattern.compile("(?<=class=\"lightblue\">)(.*?)(?=</a>)");
-			Pattern patternPublishTime = Pattern.compile("(?<=发布于 )(.*?)(?=<span class=\"article_comment\">)");*/
-			//解析csdn博客html
 			int start = html.indexOf("<!--AdForward End--></div>");
 			int end = html.indexOf("<div class=\"page_nav\">");
-			//System.out.println("start:"+start);
-			//System.out.println("end:"+end);
+			
 			String str1 = html.substring(start, end);
 			Log.i(tag,"str1 -->\n"+str1);
 			String[] strArray = str1.split("<div class=\"blog_list\">");
@@ -147,14 +136,6 @@ public class Network {
 					news.textUrl = matcherTextUrl.group();
 					news.author = matcherAuthor.group();
 					news.publishTime = matcherPublishTime.group();
-//					System.out.println("--------------------");
-//					System.out.println("src:"+news.headPictureUrl);
-//					System.out.println("title:"+news.title);
-//					System.out.println("summary:"+news.summary);
-//					System.out.println("textUrl:"+news.textUrl);
-//					System.out.println("author:"+news.author);
-//					System.out.println("publishTime:"+news.publishTime);
-//					System.out.println("--------------------");
 					newsList.add(news);
 				}
 			}
@@ -168,8 +149,13 @@ public class Network {
 	}
 	/**
 	 * 获取博客项正文
+	 * 
+	 * @param 某一博客正文的地址
+	 * 
+	 * @return 返回该博客正文的内容,获取失败返回null
+	 * 
 	 * */
-	public static String getBlogDetail(String urlString)
+	public String getBlogDetail(String urlString)
 	{
 		try
 		{
@@ -197,8 +183,13 @@ public class Network {
 	}
 	/**
 	 * 解析获取到的博客正文html
+	 * 
+	 * @param html 获取博客正文得到的html源代码
+	 * 
+	 * @return 解析成功返回博客正文,失败返回null
+	 * 
 	 * */
-	public static String parseBlogDetailHtml(String html)
+	public String parseBlogDetailHtml(String html)
 	{
 		try
 		{

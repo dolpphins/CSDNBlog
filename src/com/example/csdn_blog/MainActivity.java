@@ -52,6 +52,7 @@ public class MainActivity extends Activity {
 	private int viewpager_head_tip_width;//导航条下面的滑动条宽度
 	private int currentNavigationIndex = 0;//当前选中的导航项
 	private ViewPager viewpager = null;
+	public static int currentViewPageeIndex = 0;//当前ViewPager索引
 	private BlogPagerAdapter blogPagerAdapter = null;
 	private BlogOnPageChangeListener blogOnPageChangeListener = null;
 	private List<LinearLayout> blogPagerViews = new ArrayList<LinearLayout>();
@@ -65,6 +66,11 @@ public class MainActivity extends Activity {
 	private BlogNews mobileBlogNews;
 	private String mobileBaseUrlString = "http://blog.csdn.net/mobile/index.html";
 	private String mobileCacheFileName = "mobile";
+	//Web前端
+	private PullToRefreshListView webNewsListView = null;
+	private BlogNews webBlogNews;
+	private String webBaseUrlString = "http://blog.csdn.net/web/index.html";
+	private String webCacheFileName = "web";
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +89,8 @@ public class MainActivity extends Activity {
         //初始化其它控件(如pulltorefresh等)
         initOther();
         //初始化各个对象
-        mobileBlogNews = new BlogNews(this, mobileNewsListView,mobileBaseUrlString,mobileCacheFileName);
+        mobileBlogNews = new BlogNews(this, mobileNewsListView,mobileBaseUrlString,mobileCacheFileName,currentViewPageeIndex);
+        webBlogNews = new BlogNews(this, webNewsListView,webBaseUrlString,webCacheFileName,currentViewPageeIndex);
     }
     /**
      * 
@@ -278,16 +285,22 @@ public class MainActivity extends Activity {
     private void initOther()
     {
     	mobileNewsListView = (PullToRefreshListView) blogPagerViews.get(0).findViewById(R.id.newsListView);
+    	webNewsListView = (PullToRefreshListView) blogPagerViews.get(1).findViewById(R.id.newsListView);
     }
     
     @Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     	Log.i(tag,"requestCode:"+requestCode);
     	Log.i(tag,"resultCode:"+resultCode);
-    	//从博客正文返回
+    	//从移动开发博客正文返回
 		if(requestCode == 0 && resultCode == 100 && null != data)
 		{
-			mobileBlogNews.handleForReadBlog(data);
+			if(mobileBlogNews != null) mobileBlogNews.handleForReadBlog(data);
+		}
+		//从Web前端博客正文返回
+		else if(requestCode == 1 && resultCode == 100 && null != data)
+		{
+			if(webBlogNews != null) webBlogNews.handleForReadBlog(data);
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
@@ -296,7 +309,9 @@ public class MainActivity extends Activity {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if(keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			mobileBlogNews.saveCacheToFile();//将最新的缓存保存到文件中
+			//将最新的缓存保存到文件中
+			if(mobileBlogNews != null) mobileBlogNews.saveCacheToFile();
+			if(webBlogNews != null) webBlogNews.saveCacheToFile();
 		}
 		return super.onKeyDown(keyCode, event);
 	}

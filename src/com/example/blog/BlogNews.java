@@ -20,19 +20,20 @@ import android.util.Log;
 import android.util.Xml;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 
+import com.example.csdn_blog.MainActivity;
 import com.example.csdn_blog.R;
 import com.example.myclass.News;
 import com.example.network.Network;
 import com.example.util.FunctionUtils;
 import com.example.util.NewsListViewAdapter;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 public class BlogNews {
@@ -42,10 +43,12 @@ public class BlogNews {
 	private final static int LOADMORE_FINISH_SUCCESS = 3;//加载更多成功
 	private final static int LOADMORE_FINISH_FAIL = 4;//加载更多失败
 	private final static int FRESH_FINISH = 5;//刷新完成
-	private static String baseUrlString = "";
-	private final static String cacheFilePath = "/CSDN/Cache/";//缓存文件路径
-	private final static String blogDetailCacheFilePath = "/CSDN/Cache/BlogDetail";//博客正文缓存文件夹
-	private static String cacheFileName = "";//缓存文件名
+	
+	private String baseUrlString = "";
+	private final String cacheFilePath = "/CSDN/Cache/";//缓存文件路径
+	private final String blogDetailCacheFilePath = "/CSDN/Cache/BlogDetail";//博客正文缓存文件夹
+	private String cacheFileName = "";//缓存文件名
+	public int currentViewPageeIndex = 0;//当前ViewPager索引
 	
 	private int currentPage = 1;//当前页数
 	private Context context = null;
@@ -57,12 +60,17 @@ public class BlogNews {
 	private LinearLayout view;//保存ListView当前点击的View对象
 	private int itemCount = 0;//保存第一页的条数
 	
-	public BlogNews(Context context,PullToRefreshListView newsListView,String baseUrlString,String cacheFileName)
+	private Network network = null;//网络类用于网络操作
+	
+	public BlogNews(Context context,PullToRefreshListView newsListView,String baseUrlString,String cacheFileName,int currentViewPageeIndex)
 	{
 		this.context = context;
 		this.newsListView = newsListView;
 		this.baseUrlString = baseUrlString;
 		this.cacheFileName = cacheFileName;
+		this.currentViewPageeIndex = currentViewPageeIndex;
+		
+		network = new Network();
 		
 		newsListView.setMode(Mode.BOTH);
         newsListView.getLoadingLayoutProxy(true,false).setPullLabel("下拉刷新");
@@ -166,7 +174,7 @@ public class BlogNews {
 			@Override
 			public void onPullDownToRefresh(PullToRefreshBase refreshView) {
 				Log.i(tag,"pull down to refresh");
-				if(!Network.isAvailable(context))
+				if(!network.isAvailable(context))
 				{
 					handler.sendEmptyMessage(FRESH_FINISH);
 					Toast.makeText(context, "网络不可用", Toast.LENGTH_SHORT).show();	
@@ -177,7 +185,7 @@ public class BlogNews {
 			@Override
 			public void onPullUpToRefresh(PullToRefreshBase refreshView) {
 				Log.i(tag,"pull up to refresh");
-				if(!Network.isAvailable(context))
+				if(!network.isAvailable(context))
 				{
 					handler.sendEmptyMessage(FRESH_FINISH);
 					Toast.makeText(context, "网络不可用", Toast.LENGTH_SHORT).show();
@@ -196,7 +204,7 @@ public class BlogNews {
 				intent.putExtra("news", newsList.get(position-1));
 				intent.putExtra("position", position-1);
 				intent.putExtra("cacheFileName", cacheFileName);
-				((Activity) context).startActivityForResult(intent, 0);
+				((Activity) context).startActivityForResult(intent, ((MainActivity) context).currentViewPageeIndex);
 			}
 		});
 	}
@@ -409,7 +417,7 @@ public class BlogNews {
 			@Override
 			public void run() {
 				Log.i(tag,"start getData");
-				List<News> list = Network.getData(baseUrlString);
+				List<News> list = network.getData(baseUrlString);
 				Log.i(tag,"getData finish");
 				//下拉刷新(获取数据)成功
 				if(list != null) 
@@ -436,7 +444,7 @@ public class BlogNews {
 				String urlString = baseUrlString + "?&page=" + currentPage;
 				System.out.println(urlString);
 				Log.i(tag,"start loadMore");
-				newsListTemp = Network.getData(urlString);
+				newsListTemp = network.getData(urlString);
 				Log.i(tag,"loadMore finish");
 				//加载更多成功
 				if(newsListTemp != null) handler.sendEmptyMessage(LOADMORE_FINISH_SUCCESS);

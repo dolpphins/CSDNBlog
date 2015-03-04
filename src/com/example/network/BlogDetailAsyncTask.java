@@ -1,26 +1,20 @@
 package com.example.network;
 
-import java.io.File;
-import java.io.FileInputStream;
-
-import com.example.blog.BlogDetailActivity;
-import com.example.csdn_blog.R;
-import com.example.myclass.News;
-import com.example.util.FunctionUtils;
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.os.Environment;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.blog.BlogDetailActivity;
+import com.example.csdn_blog.R;
+import com.example.myclass.News;
+import com.example.util.FunctionUtils;
 
 public class BlogDetailAsyncTask extends AsyncTask<String,Void,String>{
 	private final static String tag = "BlogDetailAsyncTask";
@@ -41,12 +35,16 @@ public class BlogDetailAsyncTask extends AsyncTask<String,Void,String>{
 	
 	private boolean readFromFile = false;//标记当前博客正文是否是从文件缓存中读取的
 	
+	private Network network = null;//网络类用于网络操作
+	
 	//public BlogDetailAsyncTask(){}
 	public BlogDetailAsyncTask(Context context,News news,String cacheFileName)
 	{
 		this.context = context;
 		this.news = news;
 		this.cacheFileName = cacheFileName; 
+		
+		network = new Network();
 	}
 	
 	@Override
@@ -54,7 +52,7 @@ public class BlogDetailAsyncTask extends AsyncTask<String,Void,String>{
 		urlString = params[0];
 		//判断是否已在缓存中
 		String result = FunctionUtils.readBlogDetailCacheFromFile(urlString,blogDetailCacheFilePath,cacheFileName);
-		if(result == null) return Network.getBlogDetail(urlString);
+		if(result == null) return network.getBlogDetail(urlString);
 		readFromFile = true;
 		return result;
 	}
