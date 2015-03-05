@@ -70,6 +70,23 @@ public class FunctionUtils {
 		return pictureFileName;
 	}
 	/**
+	 * 
+	 * 由专栏路径得到专栏唯一标识
+	 * 
+	 * @param urlString 某一专栏路径
+	 * 
+	 * @return 返回保存该专栏缓存的唯一文件名
+	 * 
+	 * */
+	public static String getColumnNameByUrl(String urlString)
+	{
+		int start = urlString.lastIndexOf("/");
+		int end = urlString.lastIndexOf(".");
+		String pictureFileName = urlString.substring(start+1, end);
+		Log.i(tag,pictureFileName);
+		return pictureFileName;
+	}
+	/**
 	 * 读取图片文件缓存
 	 * 
 	 * @param pictureFileName 图片文件名

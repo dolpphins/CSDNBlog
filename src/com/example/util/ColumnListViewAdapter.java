@@ -28,7 +28,7 @@ public class ColumnListViewAdapter extends NewsListViewAdapter {
 			TextView summary = (TextView) viewCache.get(position).get().findViewById(R.id.column_summary);
 			return viewCache.get(position).get();
 		}
-		LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.column_item_layout, null);
+		LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.column_list_item_layout, null);
 		//БъЬт
 		TextView title = (TextView) linearLayout.findViewById(R.id.column_news_title);
 		title.setText(newsList.get(position).title);

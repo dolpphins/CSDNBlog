@@ -8,26 +8,27 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.example.blog.BlogDetailActivity;
 import com.example.blog.BlogNews;
 import com.example.csdn_blog.MainActivity;
-import com.example.myclass.ColumnItem;
 import com.example.myclass.News;
 import com.example.util.NewsListViewAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 
-public class Column extends BlogNews{
-	private final String tag = "Column";
+
+public class ColumnDetail extends BlogNews {
+	private final String tag = "ColumnDetail";
 	
-	public Column(Context context, PullToRefreshListView newsListView,String baseUrlString, String cacheFileName,int currentViewPageeIndex,NewsListViewAdapter newsListViewAdapter)
-	{
-		super(context, newsListView, baseUrlString, cacheFileName,currentViewPageeIndex,newsListViewAdapter);
+	public ColumnDetail(Context context, PullToRefreshListView newsListView,
+			String baseUrlString, String cacheFileName,
+			 NewsListViewAdapter newsListViewAdapter) {
+		super(context, newsListView, baseUrlString, cacheFileName,
+				-1, newsListViewAdapter);
 	}
 	
 	@Override
@@ -39,7 +40,7 @@ public class Column extends BlogNews{
 			public void run() {
 				Log.i(tag,"start getData");
 				String html = network.getData(baseUrlString);
-				List<News> list = network.parseColumnHtml(html);
+				List<News> list = network.parseOneColumnHtml(html);
 				Log.i(tag,"getData finish");
 				//下拉刷新(获取数据)成功
 				if(list != null) 
@@ -86,16 +87,11 @@ public class Column extends BlogNews{
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-//				BlogNews.this.view = (LinearLayout)view;
-				Intent intent = new Intent(context,ColumnItemActivity.class);
-//				intent.putExtra("news", newsList.get(position-1));
-//				intent.putExtra("position", position-1);
-				ColumnItem columnItem = new ColumnItem();
-				columnItem.ColumnUrl = newsList.get(position-1).textUrl;
-				columnItem.ColumnName = newsList.get(position-1).title;
-				intent.putExtra("columnItem", columnItem);
-				((Activity) context).startActivity(intent);
-				
+				//Intent intent = new Intent(context,BlogDetailActivity.class);
+				//intent.putExtra("news", newsList.get(position-1));
+				//intent.putExtra("position", position-1);
+				//intent.putExtra("cacheFileName", cacheFileName);
+				//((Activity) context).startActivity(intent);
 			}
 		});
 	}
@@ -111,7 +107,7 @@ public class Column extends BlogNews{
 				System.out.println(urlString);
 				Log.i(tag,"start loadMore");
 				String html = network.getData(urlString);
-				newsListTemp = network.parseColumnHtml(html);
+				newsListTemp = network.parseOneColumnHtml(html);
 				Log.i(tag,"loadMore finish");
 				//加载更多成功
 				if(newsListTemp != null) handler.sendEmptyMessage(LOADMORE_FINISH_SUCCESS);
@@ -120,4 +116,14 @@ public class Column extends BlogNews{
 			}
     	}).start();
 	}
+	/**
+	 * 
+	 * 设置缓存文件夹
+	 * 
+	 * */
+	public void setCacheFolder(String cacheFilePath)
+	{
+		this.cacheFilePath = cacheFilePath;
+	}
+	
 }

@@ -132,7 +132,7 @@ public class MainActivity extends Activity {
 	 * */
 	private PullToRefreshListView columnsNewsListView = null;
 	private ColumnListViewAdapter columnsNewsListViewAdapter = null;
-	private Column column;
+	private Column column = null;
 	private String columnsBaseUrlString = "http://blog.csdn.net/all/column/list.html";
 	private String columnsCacheFileName = "columns";
 	

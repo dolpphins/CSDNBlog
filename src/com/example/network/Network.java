@@ -192,6 +192,8 @@ public class Network {
 			int start = html.indexOf("<div id=\"article_content\" class=\"article_content\">");
 			int end = html.indexOf("<!-- Baidu Button BEGIN -->");
 			String result = "";
+			Log.i(tag,"start:"+start);
+			Log.i(tag,"end:"+end);
 			result = html.substring(start, end);
 			return result;
 		}
@@ -251,8 +253,73 @@ public class Network {
 					news.headPictureUrl = matcherSrc.group();
 					news.title = matcherTitle.group();
 					news.summary = matcherSummary.group().split("</a>")[1];
-					news.textUrl = "http://www.csdn.net" + matcherTextUrl.group();
+					news.textUrl = "http://blog.csdn.net" + matcherTextUrl.group();
 					news.author = matcherAuthor.group();
+					
+					newsList.add(news);
+				}
+			}
+			return newsList;
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+	/**
+	 * 
+	 * 解析某一专栏的html源代码
+	 * 
+	 * */
+	public List<News> parseOneColumnHtml(String html)
+	{
+		try
+		{
+			List<News> newsList = new ArrayList<News>();
+			int i,count;
+			int start = html.indexOf("<h1 class=\"tit");
+			int end = html.indexOf("<div class=\"page_nav\">");
+			
+			String str1 = html.substring(start, end);
+			Log.i(tag,"str1 -->\n"+str1);
+			String[] strArray = str1.split("class=\"blog_list\">");
+			//标题
+			Pattern patternTitle = Pattern.compile("(?<=target=\"_blank\">)(.*?)(?=</a>)");
+			//摘要		
+			Pattern patternSummmary = Pattern.compile("(?<=<p>)(.*?)(?=</p>)");
+			//正文链接
+			Pattern patternTextUrl = Pattern.compile("(?<=href=\")(.*?)(?=\")");
+			//发布者
+			Pattern patternAuthor = Pattern.compile("(?<=class=\"user_name\">)(.*?)(?=</a>)");
+			//发布时间
+			Pattern patternPublishTime = Pattern.compile("(?<=<span class=\"time\">)(.*?)(?=</span>)");
+			
+			count = strArray.length;
+			System.out.println("count:"+count);
+			for(i = 1 ; i < count ; i++)
+			{
+				System.out.println("strArray["+i+"] -->\n" + strArray[i]);
+				Matcher matcherTitle = patternTitle.matcher(strArray[i]);
+				Matcher matcherSummary = patternSummmary.matcher(strArray[i]);
+				Matcher matcherTextUrl = patternTextUrl.matcher(strArray[i]);
+				Matcher matcherAuthor = patternAuthor.matcher(strArray[i]);
+				Matcher matcherPublishTime = patternPublishTime.matcher(strArray[i]);
+				
+				if(matcherTitle.find() && matcherSummary.find() && matcherTextUrl.find() && matcherAuthor.find() && matcherPublishTime.find())
+				{
+					News news = new News();
+					news.title = matcherTitle.group();
+					news.summary = matcherSummary.group();
+					news.textUrl = "http://blog.csdn.net" + matcherTextUrl.group();
+					news.author = matcherAuthor.group();
+					news.publishTime = matcherPublishTime.group();
+					
+					Log.i(tag,news.title);
+					Log.i(tag,news.summary);
+					Log.i(tag,news.textUrl);
+					Log.i(tag,news.author);
+					Log.i(tag,news.publishTime);
 					
 					newsList.add(news);
 				}

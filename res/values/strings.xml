@@ -24,5 +24,8 @@
 	<string name="synthesize">综合</string>
 	
 	<string name="detail">正文</string>
-
+	
+	<!-- 专栏 -->
+	<string name="column_detail">专栏详情</string>
+	
 </resources>

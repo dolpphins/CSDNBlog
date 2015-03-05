@@ -45,9 +45,9 @@ public class BlogNews {
 	public final static int FRESH_FINISH = 5;//刷新完成
 	
 	protected String baseUrlString = "";
-	private final String cacheFilePath = "/CSDN/Cache/";//缓存文件路径
+	protected String cacheFilePath = "/CSDN/Cache/";//缓存文件路径
 	private final String blogDetailCacheFilePath = "/CSDN/Cache/BlogDetail";//博客正文缓存文件夹
-	private String cacheFileName = "";//缓存文件名
+	protected String cacheFileName = "";//缓存文件名
 	public int currentViewPageeIndex = 0;//当前ViewPager索引
 	
 	protected int currentPage = 1;//当前页数
@@ -291,7 +291,15 @@ public class BlogNews {
 				
 				xmlSerializer.startTag(null, "author");
 				xmlSerializer.text(news.author);
-				xmlSerializer.endTag(null, "author");	
+				xmlSerializer.endTag(null, "author");
+				
+				xmlSerializer.startTag(null, "publishTime");
+				xmlSerializer.text(news.publishTime);
+				xmlSerializer.endTag(null, "publishTime");
+				
+				xmlSerializer.startTag(null, "hasRead");
+				xmlSerializer.text(String.valueOf(news.hasRead));
+				xmlSerializer.endTag(null, "hasRead");
 				
 				xmlSerializer.endTag(null, "newsitem");
 			}
