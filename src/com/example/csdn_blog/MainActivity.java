@@ -25,6 +25,9 @@ import android.widget.TextView;
 import com.example.blog.BlogNews;
 import com.example.blog.BlogOnPageChangeListener;
 import com.example.blog.BlogPagerAdapter;
+import com.example.column.Column;
+import com.example.util.ColumnListViewAdapter;
+import com.example.util.NewsListViewAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 public class MainActivity extends Activity {
@@ -63,54 +66,75 @@ public class MainActivity extends Activity {
 	 * */
 	//移动开发
 	private PullToRefreshListView mobileNewsListView = null;
+	private NewsListViewAdapter mobileNewsListViewAdapter = null;
 	private BlogNews mobileBlogNews;
 	private String mobileBaseUrlString = "http://blog.csdn.net/mobile/index.html";
 	private String mobileCacheFileName = "mobile";
 	//Web前端
 	private PullToRefreshListView webNewsListView = null;
+	private NewsListViewAdapter webNewsListViewAdapter = null;
 	private BlogNews webBlogNews;
 	private String webBaseUrlString = "http://blog.csdn.net/web/index.html";
 	private String webCacheFileName = "web";
 	//架构设计
 	private PullToRefreshListView frameworkNewsListView = null;
+	private NewsListViewAdapter frameworkNewsListViewAdapter = null;
 	private BlogNews frameworkBlogNews;
 	private String frameworkBaseUrlString = "http://blog.csdn.net/enterprise/index.html";
 	private String frameworkCacheFileName = "framework";
 	//编程语言
 	private PullToRefreshListView programmingNewsListView = null;
+	private NewsListViewAdapter programmingNewsListViewAdapter = null;
 	private BlogNews programmingBlogNews;
 	private String programmingBaseUrlString = "http://blog.csdn.net/code/index.html";
 	private String programmingCacheFileName = "programming";
 	//互联网
 	private PullToRefreshListView internetNewsListView = null;
+	private NewsListViewAdapter internetNewsListViewAdapter = null;
 	private BlogNews internetBlogNews;
 	private String internetBaseUrlString = "http://blog.csdn.net/www/index.html";
 	private String internetCacheFileName = "internet";
 	//数据库
 	private PullToRefreshListView databaseNewsListView = null;
+	private NewsListViewAdapter databaseNewsListViewAdapter = null;
 	private BlogNews databaseBlogNews;
 	private String databaseBaseUrlString = "http://blog.csdn.net/database/index.html";
 	private String databaseCacheFileName = "database";
 	//系统运维
 	private PullToRefreshListView systemNewsListView = null;
+	private NewsListViewAdapter systemNewsListViewAdapter = null;
 	private BlogNews systemBlogNews;
 	private String systemBaseUrlString = "http://blog.csdn.net/system/index.html";
 	private String systemCacheFileName = "database";
 	//云计算
 	private PullToRefreshListView cloudNewsListView = null;
+	private NewsListViewAdapter cloudNewsListViewAdapter = null;
 	private BlogNews cloudBlogNews;
 	private String cloudBaseUrlString = "http://blog.csdn.net/cloud/index.html";
 	private String cloudCacheFileName = "cloud";
 	//研发管理
 	private PullToRefreshListView researchNewsListView = null;
+	private NewsListViewAdapter researchNewsListViewAdapter = null;
 	private BlogNews researchBlogNews;
 	private String researchBaseUrlString = "http://blog.csdn.net/software/index.html";
 	private String researchCacheFileName = "research";
 	//综合
 	private PullToRefreshListView synthesizeNewsListView = null;
+	private NewsListViewAdapter synthesizeNewsListViewAdapter = null;
 	private BlogNews synthesizeBlogNews;
 	private String synthesizeBaseUrlString = "http://blog.csdn.net/other/index.html";
 	private String synthesizeCacheFileName = "synthesize";
+	
+	/**
+	 * 
+	 * 专栏
+	 * 
+	 * */
+	private PullToRefreshListView columnsNewsListView = null;
+	private ColumnListViewAdapter columnsNewsListViewAdapter = null;
+	private Column column;
+	private String columnsBaseUrlString = "http://blog.csdn.net/all/column/list.html";
+	private String columnsCacheFileName = "columns";
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,17 +152,8 @@ public class MainActivity extends Activity {
         initBlogPagerView();
         //初始化其它控件(如pulltorefresh等)
         initOther();
-        //初始化各个对象
-        mobileBlogNews = new BlogNews(this, mobileNewsListView,mobileBaseUrlString,mobileCacheFileName,0);
-        webBlogNews = new BlogNews(this, webNewsListView,webBaseUrlString,webCacheFileName,1);
-        frameworkBlogNews = new BlogNews(this, frameworkNewsListView,frameworkBaseUrlString,frameworkCacheFileName,2);
-        programmingBlogNews = new BlogNews(this, programmingNewsListView,programmingBaseUrlString,programmingCacheFileName,3);
-        internetBlogNews = new BlogNews(this, internetNewsListView,internetBaseUrlString,internetCacheFileName,4);
-        databaseBlogNews = new BlogNews(this, databaseNewsListView,databaseBaseUrlString,databaseCacheFileName,5);
-        systemBlogNews = new BlogNews(this, systemNewsListView,systemBaseUrlString,systemCacheFileName,6);
-        cloudBlogNews = new BlogNews(this, cloudNewsListView,cloudBaseUrlString,cloudCacheFileName,7);
-        researchBlogNews = new BlogNews(this, researchNewsListView,researchBaseUrlString,researchCacheFileName,8);
-        synthesizeBlogNews = new BlogNews(this, synthesizeNewsListView,synthesizeBaseUrlString,synthesizeCacheFileName,9);
+        //初始化博客各个对象
+        initAllObject();
     }
     /**
      * 
@@ -342,6 +357,50 @@ public class MainActivity extends Activity {
     	cloudNewsListView = (PullToRefreshListView) blogPagerViews.get(7).findViewById(R.id.newsListView);
     	researchNewsListView = (PullToRefreshListView) blogPagerViews.get(8).findViewById(R.id.newsListView);
     	synthesizeNewsListView = (PullToRefreshListView) blogPagerViews.get(9).findViewById(R.id.newsListView);
+    	
+    	columnsNewsListView = (PullToRefreshListView) this.findViewById(R.id.column_newsListView);
+    }
+    /**
+     * 
+     * 初始化各个对象
+     * 
+     * */
+    private void initAllObject()
+    {
+    	mobileNewsListViewAdapter = new NewsListViewAdapter(this);
+        mobileBlogNews = new BlogNews(this, mobileNewsListView,mobileBaseUrlString,mobileCacheFileName,0,mobileNewsListViewAdapter);
+        mobileBlogNews.init();
+        webNewsListViewAdapter = new NewsListViewAdapter(this);
+        webBlogNews = new BlogNews(this, webNewsListView,webBaseUrlString,webCacheFileName,1,webNewsListViewAdapter);
+        webBlogNews.init();
+        frameworkNewsListViewAdapter = new NewsListViewAdapter(this);
+        frameworkBlogNews = new BlogNews(this, frameworkNewsListView,frameworkBaseUrlString,frameworkCacheFileName,2,frameworkNewsListViewAdapter);
+        frameworkBlogNews.init();
+        programmingNewsListViewAdapter = new NewsListViewAdapter(this);
+        programmingBlogNews = new BlogNews(this, programmingNewsListView,programmingBaseUrlString,programmingCacheFileName,3,programmingNewsListViewAdapter);
+        programmingBlogNews.init();
+        internetNewsListViewAdapter = new NewsListViewAdapter(this);
+        internetBlogNews = new BlogNews(this, internetNewsListView,internetBaseUrlString,internetCacheFileName,4,internetNewsListViewAdapter);
+        internetBlogNews.init();
+        databaseNewsListViewAdapter = new NewsListViewAdapter(this);
+        databaseBlogNews = new BlogNews(this, databaseNewsListView,databaseBaseUrlString,databaseCacheFileName,5,databaseNewsListViewAdapter);
+        databaseBlogNews.init();
+        systemNewsListViewAdapter = new NewsListViewAdapter(this);
+        systemBlogNews = new BlogNews(this, systemNewsListView,systemBaseUrlString,systemCacheFileName,6,systemNewsListViewAdapter);
+        systemBlogNews.init();
+        cloudNewsListViewAdapter = new NewsListViewAdapter(this);
+        cloudBlogNews = new BlogNews(this, cloudNewsListView,cloudBaseUrlString,cloudCacheFileName,7,cloudNewsListViewAdapter);
+        cloudBlogNews.init();
+        researchNewsListViewAdapter = new NewsListViewAdapter(this);
+        researchBlogNews = new BlogNews(this, researchNewsListView,researchBaseUrlString,researchCacheFileName,8,researchNewsListViewAdapter);
+        researchBlogNews.init();
+        synthesizeNewsListViewAdapter = new NewsListViewAdapter(this);
+        synthesizeBlogNews = new BlogNews(this, synthesizeNewsListView,synthesizeBaseUrlString,synthesizeCacheFileName,9,synthesizeNewsListViewAdapter);
+        synthesizeBlogNews.init();
+        //初始化专栏对象
+        columnsNewsListViewAdapter = new ColumnListViewAdapter(this);
+        column = new Column(this,columnsNewsListView,columnsBaseUrlString,columnsCacheFileName,10,columnsNewsListViewAdapter);
+        column.init();
     }
     
     @Override

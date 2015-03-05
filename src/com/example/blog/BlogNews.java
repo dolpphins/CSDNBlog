@@ -38,37 +38,38 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 public class BlogNews {
 	private final static String tag = "BlogNews";
-	private final static int REQUEST_FINISH_SUCCESS = 1;//下拉刷新(获取数据)成功
-	private final static int REQUEST_FINISH_FAIL = 2;//下拉刷新(获取数据)失败
-	private final static int LOADMORE_FINISH_SUCCESS = 3;//加载更多成功
-	private final static int LOADMORE_FINISH_FAIL = 4;//加载更多失败
-	private final static int FRESH_FINISH = 5;//刷新完成
+	public final static int REQUEST_FINISH_SUCCESS = 1;//下拉刷新(获取数据)成功
+	public final static int REQUEST_FINISH_FAIL = 2;//下拉刷新(获取数据)失败
+	public final static int LOADMORE_FINISH_SUCCESS = 3;//加载更多成功
+	public final static int LOADMORE_FINISH_FAIL = 4;//加载更多失败
+	public final static int FRESH_FINISH = 5;//刷新完成
 	
-	private String baseUrlString = "";
+	protected String baseUrlString = "";
 	private final String cacheFilePath = "/CSDN/Cache/";//缓存文件路径
 	private final String blogDetailCacheFilePath = "/CSDN/Cache/BlogDetail";//博客正文缓存文件夹
 	private String cacheFileName = "";//缓存文件名
 	public int currentViewPageeIndex = 0;//当前ViewPager索引
 	
-	private int currentPage = 1;//当前页数
-	private Context context = null;
-	private PullToRefreshListView newsListView = null;
+	protected int currentPage = 1;//当前页数
+	protected Context context = null;
+	protected PullToRefreshListView newsListView = null;
 	private NewsListViewAdapter newsListViewAdapter = null;
-	private List<News> newsList = null;
-	private List<News> newsListTemp = null;//临时保存加载更多获取的数据
-	private Handler handler = null;
+	protected List<News> newsList = null;
+	protected List<News> newsListTemp = null;//临时保存加载更多获取的数据
+	protected Handler handler = null;
 	private LinearLayout view;//保存ListView当前点击的View对象
 	private int itemCount = 0;//保存第一页的条数
 	
-	private Network network = null;//网络类用于网络操作
+	protected Network network = null;//网络类用于网络操作
 	
-	public BlogNews(Context context,PullToRefreshListView newsListView,String baseUrlString,String cacheFileName,int currentViewPageeIndex)
+	public BlogNews(Context context,PullToRefreshListView newsListView,String baseUrlString,String cacheFileName,int currentViewPageeIndex,NewsListViewAdapter newsListViewAdapter)
 	{
 		this.context = context;
 		this.newsListView = newsListView;
 		this.baseUrlString = baseUrlString;
 		this.cacheFileName = cacheFileName;
 		this.currentViewPageeIndex = currentViewPageeIndex;
+		this.newsListViewAdapter = newsListViewAdapter;
 		
 		network = new Network();
 		
@@ -83,10 +84,7 @@ public class BlogNews {
         //初始化Handler对象
         initHandler();
         //设置事件
-        setEvent();
-        //初始化
-        init();
-        
+        setEvent();    
 	}
 	
 	/**
@@ -102,7 +100,7 @@ public class BlogNews {
     	boolean success = readCacheFromFile();
     	if(success) 
     	{
-    		newsListViewAdapter = new NewsListViewAdapter(context,newsList);
+    		newsListViewAdapter.setDataSet(newsList);
     		newsListView.setAdapter(newsListViewAdapter);//为listview设置适配器
     	}
     	else
@@ -130,7 +128,7 @@ public class BlogNews {
         			currentPage = 1;
         			newsListView.onRefreshComplete();//刷新完成
         			if(newsList != null) itemCount = newsList.size();
-        			newsListViewAdapter = new NewsListViewAdapter(context,newsList);
+        			newsListViewAdapter.setDataSet(newsList);
         	        newsListView.setAdapter(newsListViewAdapter);//为listview设置适配器
         	        saveCacheToFile();//保存缓存到文件中
         	        FunctionUtils.cleanBlogDetailCache(blogDetailCacheFilePath,cacheFileName);//清除博客正文缓存
@@ -167,7 +165,7 @@ public class BlogNews {
 	 * 设置事件
 	 * 
 	 * */
-	private void setEvent()
+	protected void setEvent()
 	{
 		newsListView.setOnRefreshListener(new OnRefreshListener2() {
         	//下拉刷新
@@ -293,16 +291,7 @@ public class BlogNews {
 				
 				xmlSerializer.startTag(null, "author");
 				xmlSerializer.text(news.author);
-				xmlSerializer.endTag(null, "author");
-				
-				xmlSerializer.startTag(null, "publishTime");
-				xmlSerializer.text(news.publishTime);
-				xmlSerializer.endTag(null, "publishTime");
-				
-				xmlSerializer.startTag(null, "hasRead");
-				xmlSerializer.text(String.valueOf(news.hasRead));
-				xmlSerializer.endTag(null, "hasRead");
-				System.out.println(news.hasRead);
+				xmlSerializer.endTag(null, "author");	
 				
 				xmlSerializer.endTag(null, "newsitem");
 			}
@@ -410,14 +399,15 @@ public class BlogNews {
      * 开启子线程获取网络数据
      * 
      * */
-    private void getData()
+    protected void getData()
     {
     	new Thread(new Runnable(){
 
 			@Override
 			public void run() {
 				Log.i(tag,"start getData");
-				List<News> list = network.getData(baseUrlString);
+				String html = network.getData(baseUrlString);
+				List<News> list = network.parseBlogData(html);
 				Log.i(tag,"getData finish");
 				//下拉刷新(获取数据)成功
 				if(list != null) 
@@ -434,7 +424,7 @@ public class BlogNews {
      * 下拉加载调用
      * 
      * */
-    private void loadMore()
+    protected void loadMore()
     {
     	new Thread(new Runnable(){
 
@@ -444,7 +434,8 @@ public class BlogNews {
 				String urlString = baseUrlString + "?&page=" + currentPage;
 				System.out.println(urlString);
 				Log.i(tag,"start loadMore");
-				newsListTemp = network.getData(urlString);
+				String html = network.getData(baseUrlString);
+				newsListTemp = network.parseBlogData(html);
 				Log.i(tag,"loadMore finish");
 				//加载更多成功
 				if(newsListTemp != null) handler.sendEmptyMessage(LOADMORE_FINISH_SUCCESS);
@@ -470,8 +461,8 @@ public class BlogNews {
 		{
 			newsList.get(position).hasRead = true;
 			Log.i(tag,position+" hasRead");
-			TextView title = (TextView) view.findViewById(R.id.news_title);
-			TextView summary = (TextView) view.findViewById(R.id.summary);
+			TextView title = (TextView) view.findViewById(R.id.blog_news_title);
+			TextView summary = (TextView) view.findViewById(R.id.blog_summary);
 			TextView news_author_publishtime = (TextView) view.findViewById(R.id.news_author_publishtime);
 			title.setTextColor(Color.parseColor("#7c7979"));
 			summary.setTextColor(Color.parseColor("#7c7979"));

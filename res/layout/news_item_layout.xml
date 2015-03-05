@@ -9,7 +9,7 @@
 	    android:layout_height="wrap_content"
 	    android:orientation="horizontal">
 	    <ImageView 
-	        android:id="@+id/head_picture"
+	        android:id="@+id/blog_head_picture"
 	        android:layout_width="64dip"
 	        android:layout_height="64dip"
 	        android:layout_marginLeft="10dip"
@@ -19,7 +19,7 @@
     		android:layout_width="match_parent"
     		android:layout_height="match_parent">
 			<TextView 
-			    android:id="@+id/news_title"
+			    android:id="@+id/blog_news_title"
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
 			    android:textSize="17sp"
@@ -33,7 +33,7 @@
 		</RelativeLayout>
 	</LinearLayout>
     <TextView 
-        android:id="@+id/summary"
+        android:id="@+id/blog_summary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="14sp"

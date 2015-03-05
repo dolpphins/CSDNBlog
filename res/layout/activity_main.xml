@@ -144,6 +144,13 @@
 		                    android:textSize="18sp"
 		                    android:text="@string/column"/>
 		            </LinearLayout>
+		            <com.handmark.pulltorefresh.library.PullToRefreshListView 
+				        xmlns:ptr="http://schemas.android.com/apk/res-auto"
+				        android:id="@+id/column_newsListView"
+				        android:layout_width="match_parent"
+				        android:layout_height="match_parent"
+				        ptr:ptrDrawable="@drawable/head_arrow"
+				        ptr:ptrAnimationStyle="flip"/>
 	            </LinearLayout>
 	            <LinearLayout
 	                android:id="@+id/tab3"

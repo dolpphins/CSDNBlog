@@ -3,6 +3,7 @@
     <issue id="NewApi">
         <ignore path="src/com/example/csdn_blog/MainActivity.java" />
         <ignore path="src/com/example/network/BlogDetailAsyncTask.java" />
+        <ignore path="src/com/example/util/ColumnListViewAdapter.java" />
         <ignore path="src/com/example/util/NewsListViewAdapter.java" />
     </issue>
 </lint>

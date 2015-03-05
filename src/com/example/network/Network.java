@@ -52,14 +52,11 @@ public class Network {
 	 * 
 	 * @param urlString 要获取的数据的地址
 	 * 
-	 * @return 如果获取并解析成功返回一个列表，失败返回null
-	 * 
-	 * @see parseData
+	 * @return 如果获取成功返回获取到的html源代码，失败返回null
 	 * 
 	 * */
-	public List<News> getData(String urlString)
+	public String getData(String urlString)
 	{
-		List<News> newsList = null;
 		try
 		{
 			URL url = new URL(urlString);
@@ -73,8 +70,7 @@ public class Network {
 				html += line;
 			}
 			Log.i(tag,"html -->\n"+html);
-			newsList = parseData(html);
-			return newsList;
+			return html;
 		}
 		catch(Exception e)
 		{
@@ -83,14 +79,14 @@ public class Network {
 		}
 	}
 	/**
-	 * 解析网络数据
+	 * 解析获取到的博客html
 	 * 
 	 * @param html 要解析的html源代码
 	 * 
 	 * @return 解析成功返回一个集合，失败返回null
 	 * 
 	 * */
-	public List<News> parseData(String html)
+	public List<News> parseBlogData(String html)
 	{
 		try
 		{
@@ -198,6 +194,70 @@ public class Network {
 			String result = "";
 			result = html.substring(start, end);
 			return result;
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * 
+	 * 解析获取到的专栏html
+	 * 
+	 * @param html 要解析的专栏html源代码
+	 * 
+	 * @return 解析成功返回专栏列表，解析失败返回null
+	 * 
+	 * */
+	public List<News> parseColumnHtml(String html)
+	{
+		try
+		{
+			List<News> newsList = new ArrayList<News>();
+			int i,count;
+			int start = html.indexOf("<div class=\"columns_recom\">");
+			int end = html.indexOf("<div class=\"page_nav\">");
+			
+			String str1 = html.substring(start, end);
+			Log.i(tag,"str1 -->\n"+str1);
+			String[] strArray = str1.split("<dl>");
+			//头像链接
+			Pattern patternSrc = Pattern.compile("(?<=src=\")(.*?)(?=\")");
+			//标题
+			Pattern patternTitle = Pattern.compile("(?<=class=\"title\">)(.*?)(?=</a>)");
+			//摘要		
+			Pattern patternSummmary = Pattern.compile("(?<=class=\"title\">)(.*?)(?=</dd>)");
+			//正文链接
+			Pattern patternTextUrl = Pattern.compile("(?<=href=\")(.*?)(?=\")");
+			//发布者
+			Pattern patternAuthor = Pattern.compile("(?<=class=\"builder user_list\">)(.*?)(?=</a></dt>)");
+			
+			count = strArray.length;
+			System.out.println("count:"+count);
+			for(i = 1 ; i < count ; i++)
+			{
+				System.out.println("strArray["+i+"] -->\n" + strArray[i]);
+				Matcher matcherSrc = patternSrc.matcher(strArray[i]);
+				Matcher matcherTitle = patternTitle.matcher(strArray[i]);
+				Matcher matcherSummary = patternSummmary.matcher(strArray[i]);
+				Matcher matcherTextUrl = patternTextUrl.matcher(strArray[i]);
+				Matcher matcherAuthor = patternAuthor.matcher(strArray[i]);
+				
+				if(matcherTitle.find() && matcherSrc.find() && matcherSummary.find() && matcherTextUrl.find() && matcherAuthor.find())
+				{
+					News news = new News();
+					news.headPictureUrl = matcherSrc.group();
+					news.title = matcherTitle.group();
+					news.summary = matcherSummary.group().split("</a>")[1];
+					news.textUrl = "http://www.csdn.net" + matcherTextUrl.group();
+					news.author = matcherAuthor.group();
+					
+					newsList.add(news);
+				}
+			}
+			return newsList;
 		}
 		catch(Exception e)
 		{
