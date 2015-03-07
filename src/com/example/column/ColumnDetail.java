@@ -15,6 +15,7 @@ import com.example.blog.BlogDetailActivity;
 import com.example.blog.BlogNews;
 import com.example.csdn_blog.MainActivity;
 import com.example.myclass.News;
+import com.example.network.Network;
 import com.example.util.NewsListViewAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -38,7 +39,9 @@ public class ColumnDetail extends BlogNews {
 
 			@Override
 			public void run() {
+				Log.i(tag,"abc");
 				Log.i(tag,"start getData");
+				Log.i(tag,baseUrlString);
 				String html = network.getData(baseUrlString);
 				List<News> list = network.parseOneColumnHtml(html);
 				Log.i(tag,"getData finish");
@@ -87,11 +90,11 @@ public class ColumnDetail extends BlogNews {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				//Intent intent = new Intent(context,BlogDetailActivity.class);
-				//intent.putExtra("news", newsList.get(position-1));
-				//intent.putExtra("position", position-1);
-				//intent.putExtra("cacheFileName", cacheFileName);
-				//((Activity) context).startActivity(intent);
+				Intent intent = new Intent(context,BlogDetailActivity.class);
+				intent.putExtra("news", newsList.get(position-1));
+				intent.putExtra("position", position-1);
+				intent.putExtra("cacheFileName", cacheFileName);
+				((Activity) context).startActivity(intent);
 			}
 		});
 	}

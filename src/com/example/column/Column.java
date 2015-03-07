@@ -86,6 +86,7 @@ public class Column extends BlogNews{
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
+				Log.i(tag,"click Column "+position);
 //				BlogNews.this.view = (LinearLayout)view;
 				Intent intent = new Intent(context,ColumnItemActivity.class);
 //				intent.putExtra("news", newsList.get(position-1));

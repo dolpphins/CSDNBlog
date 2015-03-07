@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.example.myclass.ColumnItem;
 import com.example.myclass.News;
 
 import android.content.Context;
@@ -155,6 +156,7 @@ public class Network {
 	{
 		try
 		{
+			Log.i(tag,"the blog url is "+urlString);
 			URL url = new URL(urlString);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			InputStream inputStream = con.getInputStream();
@@ -271,6 +273,10 @@ public class Network {
 	 * 
 	 * 解析某一专栏的html源代码
 	 * 
+	 * @param html 要解析的html源代码
+	 * 
+	 * @return 解析成功返回该专栏的所有文章列表,失败返回null
+	 * 
 	 * */
 	public List<News> parseOneColumnHtml(String html)
 	{
@@ -289,7 +295,7 @@ public class Network {
 			//摘要		
 			Pattern patternSummmary = Pattern.compile("(?<=<p>)(.*?)(?=</p>)");
 			//正文链接
-			Pattern patternTextUrl = Pattern.compile("(?<=href=\")(.*?)(?=\")");
+			Pattern patternTextUrl = Pattern.compile("(?<=http://)(.*?)(?=\" target=\"_blank\")");
 			//发布者
 			Pattern patternAuthor = Pattern.compile("(?<=class=\"user_name\">)(.*?)(?=</a>)");
 			//发布时间
@@ -311,20 +317,49 @@ public class Network {
 					News news = new News();
 					news.title = matcherTitle.group();
 					news.summary = matcherSummary.group();
-					news.textUrl = "http://blog.csdn.net" + matcherTextUrl.group();
+					news.textUrl = "http://" + matcherTextUrl.group();
 					news.author = matcherAuthor.group();
 					news.publishTime = matcherPublishTime.group();
-					
-					Log.i(tag,news.title);
-					Log.i(tag,news.summary);
-					Log.i(tag,news.textUrl);
-					Log.i(tag,news.author);
-					Log.i(tag,news.publishTime);
 					
 					newsList.add(news);
 				}
 			}
 			return newsList;
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+	/**
+	 * 
+	 * 解析得到某一专栏的具体信息,包括专栏创建者，专栏创建时间,专栏文章数和专栏浏览数
+	 * 
+	 * */
+	public ColumnItem parseColumnInfo(String html)
+	{
+		try
+		{
+			ColumnItem columnItem = new ColumnItem();
+			int i,count;
+			int start = html.indexOf("<div class=\"page_nav\">");
+			int end = html.indexOf("</ul>");
+			
+			String str1 = html.substring(start, end);
+			Log.i(tag,"str1 -->\n"+str1);
+			
+			Pattern patternCreator = Pattern.compile("(?<=<li>)(.*?)(?=<a href=)");
+			Matcher matcherCreator = patternCreator.matcher(str1);
+			if(matcherCreator.find()) columnItem.ColumnCreateTime = matcherCreator.group();
+			
+		    Pattern pattern = Pattern.compile("(?<=<li>)(.*?)(?=</li>)");
+			Matcher matcher = patternCreator.matcher(str1);
+			if(matcher.find()) columnItem.ColumnCreateTime = matcher.group();
+			if(matcher.find()) columnItem.ColumnNumberOfPassage = Integer.parseInt(matcher.group());
+			if(matcher.find()) columnItem.ColumnPageView = Integer.parseInt(matcher.group());
+			
+			return columnItem;
 		}
 		catch(Exception e)
 		{

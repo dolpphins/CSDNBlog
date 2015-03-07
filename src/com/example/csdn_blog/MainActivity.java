@@ -11,10 +11,12 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.view.Window;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,6 +28,7 @@ import com.example.blog.BlogNews;
 import com.example.blog.BlogOnPageChangeListener;
 import com.example.blog.BlogPagerAdapter;
 import com.example.column.Column;
+import com.example.column.ColumnSearchActivity;
 import com.example.util.ColumnListViewAdapter;
 import com.example.util.NewsListViewAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -135,6 +138,7 @@ public class MainActivity extends Activity {
 	private Column column = null;
 	private String columnsBaseUrlString = "http://blog.csdn.net/all/column/list.html";
 	private String columnsCacheFileName = "columns";
+	private ImageView column_search_icon = null;//专栏搜索按钮
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -359,6 +363,25 @@ public class MainActivity extends Activity {
     	synthesizeNewsListView = (PullToRefreshListView) blogPagerViews.get(9).findViewById(R.id.newsListView);
     	
     	columnsNewsListView = (PullToRefreshListView) this.findViewById(R.id.column_newsListView);
+    	column_search_icon = (ImageView) this.findViewById(R.id.column_search_icon);
+    	//专栏搜索按钮点击事件
+    	column_search_icon.setOnTouchListener(new OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				switch(event.getAction())
+				{
+				case MotionEvent.ACTION_DOWN:
+					break;
+				case MotionEvent.ACTION_UP:
+					//跳转到专栏搜索界面
+					Intent intent = new Intent(MainActivity.this,ColumnSearchActivity.class);
+					startActivity(intent);
+					break;
+				}
+				return true;
+			}
+		});
     }
     /**
      * 

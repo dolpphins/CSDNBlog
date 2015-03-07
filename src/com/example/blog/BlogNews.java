@@ -53,7 +53,7 @@ public class BlogNews {
 	protected int currentPage = 1;//当前页数
 	protected Context context = null;
 	protected PullToRefreshListView newsListView = null;
-	private NewsListViewAdapter newsListViewAdapter = null;
+	protected NewsListViewAdapter newsListViewAdapter = null;
 	protected List<News> newsList = null;
 	protected List<News> newsListTemp = null;//临时保存加载更多获取的数据
 	protected Handler handler = null;
@@ -319,7 +319,7 @@ public class BlogNews {
      * 每次程序启动时读取上次保存的文件缓存
      * 
      * */
-    private boolean readCacheFromFile()
+    protected boolean readCacheFromFile()
     {
     	//sd卡没有挂载
     	if(!FunctionUtils.sdcardExist())

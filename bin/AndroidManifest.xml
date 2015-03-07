@@ -38,6 +38,11 @@
             android:screenOrientation="portrait">
             
         </activity>
+        <activity 
+            android:name="com.example.column.ColumnSearchActivity"
+            android:screenOrientation="portrait">
+            
+        </activity>
     </application>
     
 </manifest>
