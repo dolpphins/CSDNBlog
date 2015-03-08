@@ -35,7 +35,7 @@ public class ColumnListViewAdapter extends NewsListViewAdapter {
 		//Í·Ïñ
 		ImageView head_picture = (ImageView) linearLayout.findViewById(R.id.column_head_picture);
 		head_picture.setBackground(context.getResources().getDrawable(R.drawable.csdn));
-		PictureAsyncTask pictureAsyncTask = new PictureAsyncTask(head_picture);
+		PictureAsyncTask pictureAsyncTask = new PictureAsyncTask(context,head_picture);
 		pictureAsyncTask.execute(newsList.get(position).headPictureUrl);
 		//ÕªÒª
 		TextView summary = (TextView) linearLayout.findViewById(R.id.column_summary);

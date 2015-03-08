@@ -23,5 +23,10 @@
         <item name="android:lines">1</item>
         <item name="android:textColor">#afafaf</item>
     </style>
+    
+    <style name="setting_textview_style">
+        <item name="android:textSize">18sp</item>
+        <item name="android:padding">10dip</item>
+    </style>
 
 </resources>

@@ -86,7 +86,7 @@ public class BlogDetailAsyncTask extends AsyncTask<String,Void,String>{
 		Bitmap bitmap = FunctionUtils.readPictureCacheFromFile(news.headPictureUrl,pictureCacheFilePath);
 		//设置头像
 		blog_detail_head_picture.setBackground(context.getResources().getDrawable(R.drawable.csdn));
-		if(bitmap == null) new PictureAsyncTask(blog_detail_head_picture).execute(news.headPictureUrl);
+		if(bitmap == null) new PictureAsyncTask(context,blog_detail_head_picture).execute(news.headPictureUrl);
 		else blog_detail_head_picture.setImageBitmap(bitmap);
 		//设置标题
 		blog_detail_news_title.setText(news.title);

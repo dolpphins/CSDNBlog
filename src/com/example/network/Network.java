@@ -50,6 +50,27 @@ public class Network {
 		}
 	}
 	/**
+	 * 
+	 * 判断当前网络类型
+	 * 
+	 * */
+	public static int getNetworkType(Context context)
+	{
+		ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		if(cm != null)
+		{
+			NetworkInfo ni = cm.getActiveNetworkInfo();
+			if(ni != null)
+			{
+				if(ni.isAvailable())
+				{
+					return ni.getType();
+				}
+			}
+		}
+		return -1;
+	}
+	/**
 	 * 获取网络数据并解析
 	 * 
 	 * @param urlString 要获取的数据的地址

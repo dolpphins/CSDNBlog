@@ -382,7 +382,7 @@ public class Experts {
 			LinearLayout gridItemView = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.expert_item_layout, null);
 			ImageView expert_picture = (ImageView) gridItemView.findViewById(R.id.expert_picture);
 			TextView expert_name = (TextView) gridItemView.findViewById(R.id.expert_name);
-			new PictureAsyncTask(expert_picture).execute(expert.headPictureUrl);
+			new PictureAsyncTask(context,expert_picture).execute(expert.headPictureUrl);
 			expert_name.setText(expert.name);
 			final Expert temp = expert;
 			gridItemView.setOnClickListener(new OnClickListener() {

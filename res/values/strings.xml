@@ -9,7 +9,7 @@
     <string name="blog">博客</string>
     <string name="column">专栏</string>
     <string name="experts">博客专家</string>
-    <string name="personality">设置</string>
+    <string name="setting">设置</string>
     
     <!-- 博客导航条 -->
     <string name="mobile_development">移动开发</string>
@@ -33,5 +33,14 @@
 	
 	<!-- 博客专家 -->
 	<string name="expert_detail">博客专家详情</string>
+	
+	<!-- 设置 -->
+    <string name="check_update">检查更新</string>
+    <string name="load_picture_in_wifi">只有在WiFi下显示图片</string>
+    <string name="clear_cache">清除缓存</string>
+    <string name="isReading">正在读取...</string>
+    <string name="about">关于本应用</string>
+    
+    <string name="about_message">本应用所有数据都来自CSDN网站,只用于学习,不可用于商业活动</string>
 	
 </resources>

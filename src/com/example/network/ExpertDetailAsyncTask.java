@@ -108,7 +108,7 @@ public class ExpertDetailAsyncTask extends AsyncTask<String,Void,List<News>>{
 		expertDetailListViewAdapter.notifyDataSetChanged();
 		
 		//设置侧栏布局
-		new PictureAsyncTask(expert_detail_headpicture).execute(expert.headPictureUrl);
+		new PictureAsyncTask(context,expert_detail_headpicture).execute(expert.headPictureUrl);
 		expert_detail_name.setText(expert.name);
 		
 		expert_detail_pageview.setText("访问:"+expert.pageview+"次");

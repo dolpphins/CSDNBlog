@@ -12,7 +12,15 @@ import java.io.OutputStreamWriter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.example.csdn_blog.MainActivity;
+import com.example.myclass.Setting;
+
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
@@ -289,6 +297,130 @@ public class FunctionUtils {
 		{
 			e.printStackTrace();
 			return false;
+		}
+	}
+	/**
+	 * 
+	 * 获取当前版本号
+	 * 
+	 * @param context 上下文
+	 * 
+	 * @return 获取成功返回应用当前的版本号,获取失败返货null
+	 * 
+	 * */
+	public static String getCurrentVersion(Context context)
+	{
+		PackageManager pm = context.getPackageManager();
+		try {
+			PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
+			return pi.versionName;
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	/**
+	 * 
+	 * 读取设置信息
+	 * 
+	 * @param context 上下文
+	 * 
+	 * @param settingSharedPreferenceFileName SharePreference文件名
+	 * 
+	 * @return 返回设置信息
+	 * 
+	 * */
+	public static Setting getSettingInfo(Context context,String settingSharePreferenceFileName)
+	{
+		Log.i(tag,"satrt read setting info");
+		Setting setting = new Setting();
+		SharedPreferences sp = context.getSharedPreferences(settingSharePreferenceFileName, Context.MODE_PRIVATE);
+		boolean OnlyShowPictureInWifi = sp.getBoolean("OnlyShowPictureInWifi", false);
+		setting.OnlyShowPictureInWifi = OnlyShowPictureInWifi;
+		Log.i(tag,"read setting info finish");
+		return setting;
+	}
+	/**
+	 * 
+	 * 保存设置信息
+	 * 
+	 * @param context 上下文
+	 * 
+	 * @param settingSharedPreferenceFileName SharePreference文件名
+	 * 
+	 * @param setting 要保存的设置信息
+	 * 
+	 * */
+	public static void setSettingInfo(Context context,String settingSharePreferenceFileName,Setting setting)
+	{
+		SharedPreferences sp = context.getSharedPreferences(settingSharePreferenceFileName, Context.MODE_PRIVATE);
+		Editor editor = sp.edit();
+		editor.putBoolean("OnlyShowPictureInWifi", setting.OnlyShowPictureInWifi);
+		editor.commit();
+	}
+	/**
+	 * 
+	 * 读取缓存大小
+	 * 
+	 * @param cacheFilePath 缓存文件夹路径
+	 * 
+	 * @return 返回缓存大小,单位为byte
+	 * 
+	 * */
+	public static long getCacheSize(File file)
+	{
+		try
+		{
+			if(!file.exists()) return 0;
+			if(!file.isDirectory()) 
+			{
+				return file.length();	
+			}
+			else
+			{
+				File[] childFiles = file.listFiles();
+				long size = 0;
+				for(File f:childFiles)
+				{
+					size += getCacheSize(f);
+				}
+				return size;
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return 0;
+		}
+	}
+	/**
+	 * 
+	 * 删除一个文件夹下的所有文件
+	 * 
+	 * */
+	public static void deleteDir(File file)
+	{
+		try
+		{
+			if(file == null) return;
+			if(!file.isDirectory())
+			{
+				file.delete();
+			}
+			else
+			{
+				File[] childFiles = file.listFiles();
+				for(File f:childFiles)
+				{
+					deleteDir(f);
+				}
+				return;
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return;
 		}
 	}
 }

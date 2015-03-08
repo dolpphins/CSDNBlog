@@ -1,13 +1,18 @@
 package com.example.csdn_blog;
 
 
+import java.io.File;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -19,14 +24,15 @@ import android.view.View.OnTouchListener;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.Window;
 import android.widget.FrameLayout;
-import android.widget.GridLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.blog.BlogNews;
 import com.example.blog.BlogOnPageChangeListener;
@@ -34,7 +40,10 @@ import com.example.blog.BlogPagerAdapter;
 import com.example.column.Column;
 import com.example.column.ColumnSearchActivity;
 import com.example.experts.Experts;
+import com.example.myclass.Setting;
+import com.example.util.CacheFileAsyncTask;
 import com.example.util.ColumnListViewAdapter;
+import com.example.util.FunctionUtils;
 import com.example.util.NewsListViewAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
@@ -208,6 +217,21 @@ public class MainActivity extends Activity {
 
 	private TextView expertCurrentTextView = experts_mobile;//当前选中的分类
 	
+	/**
+	 * 
+	 * 设置
+	 * 
+	 * */
+	private RelativeLayout setting_check_update = null;
+	private TextView setting_current_version = null;
+	private ImageView setting_select_button = null;
+	private RelativeLayout setting_clear_cache = null;
+	private TextView setting_cache_size = null;
+	private TextView setting_about = null;
+	
+	public static Setting setting = null;
+	private final String settingSharePreferenceFileName = "setting.xml";
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -215,7 +239,8 @@ public class MainActivity extends Activity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         //设置布局
         setContentView(R.layout.activity_main);
-        
+        //读取设置信息
+		setting = FunctionUtils.getSettingInfo(this, settingSharePreferenceFileName);
         //初始化Tab选项卡
         initTab();
         //初始化导航条
@@ -239,7 +264,7 @@ public class MainActivity extends Activity {
 		tabLabels[0] = getResources().getString(R.string.blog);
 		tabLabels[1] = getResources().getString(R.string.column);
 		tabLabels[2] = getResources().getString(R.string.experts);
-		tabLabels[3] = getResources().getString(R.string.personality);
+		tabLabels[3] = getResources().getString(R.string.setting);
 		tabViews[0] = (LinearLayout) getLayoutInflater().inflate(R.layout.blog_layout, null);
 		tabViews[1] = (LinearLayout) getLayoutInflater().inflate(R.layout.column_layout, null);
 		tabViews[2] = (LinearLayout) getLayoutInflater().inflate(R.layout.experts_layout, null);
@@ -314,14 +339,16 @@ public class MainActivity extends Activity {
 						mobileExperts.init(expertsMobileUrl,expertsMobileCacheFileName);
 					}
 				}
-				//选中个人中心
-				else if(MainActivity.this.getResources().getString(R.string.personality).equals(tabId))
+				//选中设置
+				else if(MainActivity.this.getResources().getString(R.string.setting).equals(tabId))
 				{
 					currentSelTab = 3;
 					ImageView  iv1 = (ImageView) tabViews[currentSelTab].findViewById(R.id.tab_icon);
 					TextView tv1 = (TextView) tabViews[currentSelTab].findViewById(R.id.tab_text);
 					iv1.setBackground(getResources().getDrawable(R.drawable.icon_setting_sel));
 					tv1.setTextColor(Color.parseColor("#0000ff"));
+					//初始化
+					initSettingTab();
 				}
 			}
 		});
@@ -666,7 +693,118 @@ public class MainActivity extends Activity {
 			}
 		});
     }
-    
+    /**
+     * 
+     * 初始化設置選項
+     * 
+     * */
+    private void initSettingTab()
+    {
+    	if(setting_check_update == null) 
+    	{
+    		setting_check_update = (RelativeLayout) MainActivity.this.findViewById(R.id.setting_check_update);
+    		setting_check_update.setOnTouchListener(new OnTouchListener() {
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					int type = event.getAction();
+					if(type == MotionEvent.ACTION_DOWN) setting_check_update.setBackground(getResources().getDrawable(R.drawable.setting_item_bg_sel));
+					else if(type == MotionEvent.ACTION_UP)
+					{
+						setting_check_update.setBackground(getResources().getDrawable(R.drawable.setting_item_bg_nor));
+						Toast.makeText(MainActivity.this, "该功能尚未实现", Toast.LENGTH_SHORT).show();
+					}
+					return true;
+				}
+			});
+    	}
+    	if(setting_current_version == null)
+    	{
+    		setting_current_version = (TextView) MainActivity.this.findViewById(R.id.setting_current_version);
+    		String versionName = FunctionUtils.getCurrentVersion(MainActivity.this);
+    		if(versionName != null) setting_current_version.setText("V "+versionName);
+    	}
+    	if(setting_select_button == null) 
+    	{
+    		setting_select_button = (ImageView) MainActivity.this.findViewById(R.id.setting_select_button);
+    		
+    		if(setting.OnlyShowPictureInWifi == true) setting_select_button.setBackground(getResources().getDrawable(R.drawable.icon_switch_on));
+    		else setting_select_button.setBackground(getResources().getDrawable(R.drawable.icon_switch_off));
+    		
+    		setting_select_button.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					if(setting.OnlyShowPictureInWifi == true)
+					{
+						setting.OnlyShowPictureInWifi = false;
+						FunctionUtils.setSettingInfo(MainActivity.this, settingSharePreferenceFileName, setting);
+						setting_select_button.setBackground(getResources().getDrawable(R.drawable.icon_switch_off));
+					}
+					else
+					{
+						setting.OnlyShowPictureInWifi = true;
+						FunctionUtils.setSettingInfo(MainActivity.this, settingSharePreferenceFileName, setting);
+						setting_select_button.setBackground(getResources().getDrawable(R.drawable.icon_switch_on));
+					}
+				}
+			});
+    	}
+    	if(setting_clear_cache == null) 
+    	{
+    		setting_clear_cache = (RelativeLayout) MainActivity.this.findViewById(R.id.setting_clear_cache);
+    		setting_clear_cache.setOnTouchListener(new OnTouchListener() {
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					int type = event.getAction();
+					if(type == MotionEvent.ACTION_DOWN) setting_clear_cache.setBackground(getResources().getDrawable(R.drawable.setting_item_bg_sel));
+					else if(type == MotionEvent.ACTION_UP)
+					{
+						setting_clear_cache.setBackground(getResources().getDrawable(R.drawable.setting_item_bg_nor));
+						AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+						builder.setMessage("你真的要删除缓存吗?");
+						builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								Log.i(tag,"delete cache");
+								File file = new File(Environment.getExternalStorageDirectory(),"/CSDN/Cache");
+								new CacheFileAsyncTask(MainActivity.this,setting_cache_size, CacheFileAsyncTask.TYPE_DELETE).execute(file);
+							}
+						});
+						builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								Log.i(tag,"cancel delete cache");
+							}
+						});
+						builder.show();
+					}
+					return true;
+				}
+			});
+    	}
+    	if(setting_cache_size == null) setting_cache_size = (TextView) MainActivity.this.findViewById(R.id.setting_cache_size);
+    	if(setting_about == null) 
+    	{
+    		setting_about = (TextView) MainActivity.this.findViewById(R.id.setting_about);
+    		setting_about.setOnTouchListener(new OnTouchListener() {
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					int type = event.getAction();
+					if(type == MotionEvent.ACTION_DOWN) setting_about.setBackground(getResources().getDrawable(R.drawable.setting_item_bg_sel));
+					else if(type == MotionEvent.ACTION_UP)
+					{
+						setting_about.setBackground(getResources().getDrawable(R.drawable.setting_item_bg_nor));
+						AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+						builder.setMessage(getResources().getString(R.string.about_message));
+						builder.show();
+					}
+					return true;
+				}
+			});
+    	}
+    	//读取缓存大小
+    	File file = new File(Environment.getExternalStorageDirectory(),"/CSDN/Cache");
+    	new CacheFileAsyncTask(MainActivity.this,setting_cache_size, CacheFileAsyncTask.TYPE_SIZE).execute(file);
+    }
     @Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     	Log.i(tag,"requestCode:"+requestCode);

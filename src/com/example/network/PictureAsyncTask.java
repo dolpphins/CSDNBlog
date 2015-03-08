@@ -12,15 +12,18 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
-import android.util.Pair;
 import android.widget.ImageView;
 
+import com.example.csdn_blog.MainActivity;
+import com.example.myclass.Setting;
 import com.example.util.FunctionUtils;
 
 public class PictureAsyncTask extends AsyncTask<String,Void,Bitmap>{
@@ -30,11 +33,14 @@ public class PictureAsyncTask extends AsyncTask<String,Void,Bitmap>{
 	private ImageView imageView = null;
 	private String urlString = "";//当前正在获取的图片的地址
 	
+	private Context context = null;
+	private String settingSharePreferenceFileName = "setting.xml";
 	//图片缓存
 	private static HashMap<String,SoftReference<Bitmap> > bitmapCache = new HashMap<String,SoftReference<Bitmap> >();
 	
-	public PictureAsyncTask(ImageView imageView)
+	public PictureAsyncTask(Context context,ImageView imageView)
 	{
+		this.context = context;
 		this.imageView = imageView;
 	}
 	@Override
@@ -48,6 +54,7 @@ public class PictureAsyncTask extends AsyncTask<String,Void,Bitmap>{
 		if((result = readBitmapFromMemory(pictureFileName)) != null) return result;
 		//如果文件缓存中有该图片
 		if((result = FunctionUtils.readPictureCacheFromFile(pictureFileName,pictureCacheFilePath)) != null) return result; 
+		if(MainActivity.setting.OnlyShowPictureInWifi && (Network.getNetworkType(context) != ConnectivityManager.TYPE_WIFI)) return null;
 		try {
 			HttpGet httpGet = new HttpGet(urlString);
 			HttpClient httpClient = new DefaultHttpClient();
@@ -69,11 +76,13 @@ public class PictureAsyncTask extends AsyncTask<String,Void,Bitmap>{
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void onPostExecute(Bitmap result) {
+		if(result == null) return;
 		imageView.setImageBitmap(result);
 		//将获取到的图片保存到内存缓存中
 		saveBitmapToMemory(FunctionUtils.getPictureNameByUrl(urlString),result);
 		//将获取到的图片保存到文件缓存中
-		if(result!=null) savePictureCacheToFile(result);
+		savePictureCacheToFile(result);
+		
 		super.onPostExecute(result);
 	}
 	@Override

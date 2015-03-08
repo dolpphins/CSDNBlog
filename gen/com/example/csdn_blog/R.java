@@ -185,59 +185,63 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int icon_personality_sel=0x7f02000f;
         public static final int icon_setting_nor=0x7f020010;
         public static final int icon_setting_sel=0x7f020011;
-        public static final int indicator_arrow=0x7f020012;
-        public static final int indicator_bg_bottom=0x7f020013;
-        public static final int indicator_bg_top=0x7f020014;
-        public static final int loading=0x7f020015;
-        public static final int navigationbar_back=0x7f020016;
-        public static final int search_bg=0x7f020017;
-        public static final int search_input_bg=0x7f020018;
+        public static final int icon_switch_off=0x7f020012;
+        public static final int icon_switch_on=0x7f020013;
+        public static final int indicator_arrow=0x7f020014;
+        public static final int indicator_bg_bottom=0x7f020015;
+        public static final int indicator_bg_top=0x7f020016;
+        public static final int loading=0x7f020017;
+        public static final int navigationbar_back=0x7f020018;
+        public static final int search_bg=0x7f020019;
+        public static final int search_input_bg=0x7f02001a;
+        public static final int setting_item_bg_nor=0x7f02001b;
+        public static final int setting_item_bg_sel=0x7f02001c;
     }
     public static final class id {
-        public static final int action_settings=0x7f05005e;
-        public static final int blog_detail_head_picture=0x7f05002c;
-        public static final int blog_detail_load_icon=0x7f050030;
-        public static final int blog_detail_news_author_publishtime=0x7f05002e;
-        public static final int blog_detail_news_title=0x7f05002d;
-        public static final int blog_detail_text=0x7f05002f;
-        public static final int blog_head_picture=0x7f050055;
-        public static final int blog_news_title=0x7f050056;
-        public static final int blog_summary=0x7f050058;
+        public static final int action_settings=0x7f050064;
+        public static final int blog_detail_head_picture=0x7f050032;
+        public static final int blog_detail_load_icon=0x7f050036;
+        public static final int blog_detail_news_author_publishtime=0x7f050034;
+        public static final int blog_detail_news_title=0x7f050033;
+        public static final int blog_detail_text=0x7f050035;
+        public static final int blog_head_picture=0x7f05005b;
+        public static final int blog_news_title=0x7f05005c;
+        public static final int blog_summary=0x7f05005e;
         public static final int both=0x7f050003;
-        public static final int columnItemListView=0x7f050039;
-        public static final int column_author_publishtime=0x7f050037;
-        public static final int column_detail=0x7f050038;
-        public static final int column_detail_summary=0x7f050036;
-        public static final int column_detail_title=0x7f050035;
-        public static final int column_head_picture=0x7f05003a;
+        public static final int columnItemListView=0x7f05003f;
+        public static final int column_author_publishtime=0x7f05003d;
+        public static final int column_detail=0x7f05003e;
+        public static final int column_detail_summary=0x7f05003c;
+        public static final int column_detail_title=0x7f05003b;
+        public static final int column_head_picture=0x7f050040;
         public static final int column_newsListView=0x7f05001e;
-        public static final int column_news_title=0x7f05003b;
-        public static final int column_search_button=0x7f05003e;
-        public static final int column_search_edit=0x7f05003d;
+        public static final int column_news_title=0x7f050041;
+        public static final int column_search_button=0x7f050044;
+        public static final int column_search_edit=0x7f050043;
         public static final int column_search_icon=0x7f05001d;
-        public static final int column_search_result=0x7f05003f;
-        public static final int column_searching_icon=0x7f050040;
-        public static final int column_summary=0x7f05003c;
-        public static final int detail_item_back=0x7f05002b;
+        public static final int column_search_result=0x7f050045;
+        public static final int column_searching_icon=0x7f050046;
+        public static final int column_summary=0x7f050042;
+        public static final int detail_item_back=0x7f050031;
         public static final int disabled=0x7f050000;
-        public static final int expert_article_listview=0x7f050046;
-        public static final int expert_detail=0x7f050044;
-        public static final int expert_detail_headpicture=0x7f050049;
-        public static final int expert_detail_icon=0x7f050047;
-        public static final int expert_detail_name=0x7f05004a;
-        public static final int expert_detail_original=0x7f05004e;
-        public static final int expert_detail_pageview=0x7f05004b;
-        public static final int expert_detail_rank=0x7f05004d;
-        public static final int expert_detail_score=0x7f05004c;
-        public static final int expert_detail_show_icon=0x7f050045;
-        public static final int expert_detail_sidelayout=0x7f050048;
-        public static final int expert_detail_summary=0x7f050042;
-        public static final int expert_detail_title=0x7f050041;
-        public static final int expert_detail_translation=0x7f050050;
-        public static final int expert_detail_transshipment=0x7f05004f;
-        public static final int expert_name=0x7f050052;
-        public static final int expert_pageview_publishtime=0x7f050043;
-        public static final int expert_picture=0x7f050051;
+        public static final int expert_article_listview=0x7f05004c;
+        public static final int expert_detail=0x7f05004a;
+        public static final int expert_detail_headpicture=0x7f05004f;
+        public static final int expert_detail_icon=0x7f05004d;
+        public static final int expert_detail_name=0x7f050050;
+        public static final int expert_detail_original=0x7f050054;
+        public static final int expert_detail_pageview=0x7f050051;
+        public static final int expert_detail_rank=0x7f050053;
+        public static final int expert_detail_score=0x7f050052;
+        public static final int expert_detail_show_icon=0x7f05004b;
+        public static final int expert_detail_sidelayout=0x7f05004e;
+        public static final int expert_detail_summary=0x7f050048;
+        public static final int expert_detail_title=0x7f050047;
+        public static final int expert_detail_translation=0x7f050056;
+        public static final int expert_detail_transshipment=0x7f050055;
+        public static final int expert_name=0x7f050058;
+        public static final int expert_pageview_publishtime=0x7f050049;
+        public static final int expert_picture=0x7f050057;
         public static final int experts_cloud=0x7f050027;
         public static final int experts_database=0x7f050025;
         public static final int experts_framework=0x7f050022;
@@ -246,34 +250,40 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int experts_mobile=0x7f050020;
         public static final int experts_programming=0x7f050023;
         public static final int experts_research=0x7f050028;
-        public static final int experts_searching_icon=0x7f050054;
+        public static final int experts_searching_icon=0x7f05005a;
         public static final int experts_system=0x7f050026;
-        public static final int experts_table=0x7f050053;
+        public static final int experts_table=0x7f050059;
         public static final int experts_web=0x7f050021;
-        public static final int fl_inner=0x7f050059;
+        public static final int fl_inner=0x7f05005f;
         public static final int flip=0x7f050008;
         public static final int gridview=0x7f050009;
         public static final int manualOnly=0x7f050004;
-        public static final int newsListView=0x7f050034;
-        public static final int news_author_publishtime=0x7f050057;
+        public static final int newsListView=0x7f05003a;
+        public static final int news_author_publishtime=0x7f05005d;
         public static final int pullDownFromTop=0x7f050005;
         public static final int pullFromEnd=0x7f050002;
         public static final int pullFromStart=0x7f050001;
         public static final int pullUpFromBottom=0x7f050006;
-        public static final int pull_to_refresh_image=0x7f05005a;
-        public static final int pull_to_refresh_progress=0x7f05005b;
-        public static final int pull_to_refresh_sub_text=0x7f05005d;
-        public static final int pull_to_refresh_text=0x7f05005c;
+        public static final int pull_to_refresh_image=0x7f050060;
+        public static final int pull_to_refresh_progress=0x7f050061;
+        public static final int pull_to_refresh_sub_text=0x7f050063;
+        public static final int pull_to_refresh_text=0x7f050062;
         public static final int rotate=0x7f050007;
         public static final int scrollview=0x7f05000b;
+        public static final int setting_about=0x7f050030;
+        public static final int setting_cache_size=0x7f05002f;
+        public static final int setting_check_update=0x7f05002b;
+        public static final int setting_clear_cache=0x7f05002e;
+        public static final int setting_current_version=0x7f05002c;
+        public static final int setting_select_button=0x7f05002d;
         public static final int tab1=0x7f05000d;
         public static final int tab2=0x7f05001c;
         public static final int tab3=0x7f05001f;
         public static final int tab4=0x7f05002a;
-        public static final int tab_icon=0x7f050032;
-        public static final int tab_text=0x7f050033;
+        public static final int tab_icon=0x7f050038;
+        public static final int tab_text=0x7f050039;
         public static final int tabhost=0x7f05000c;
-        public static final int today_layout=0x7f050031;
+        public static final int today_layout=0x7f050037;
         public static final int viewpager=0x7f05001b;
         public static final int viewpager_head=0x7f05000f;
         public static final int viewpager_head_1=0x7f050010;
@@ -324,11 +334,17 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
     }
     public static final class string {
         public static final int Web=0x7f07000e;
+        public static final int about=0x7f070021;
+        public static final int about_message=0x7f070022;
         public static final int action_settings=0x7f070007;
         public static final int app_name=0x7f070006;
         /**  Tab选项卡 
          */
         public static final int blog=0x7f070009;
+        /**  设置 
+         */
+        public static final int check_update=0x7f07001d;
+        public static final int clear_cache=0x7f07001f;
         public static final int cloud_computing=0x7f070014;
         public static final int column=0x7f07000a;
         /**  专栏 
@@ -344,10 +360,11 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int framework_design=0x7f07000f;
         public static final int hello_world=0x7f070008;
         public static final int internet=0x7f070011;
+        public static final int isReading=0x7f070020;
+        public static final int load_picture_in_wifi=0x7f07001e;
         /**  博客导航条 
          */
         public static final int mobile_development=0x7f07000d;
-        public static final int personality=0x7f07000c;
         public static final int programming_languages=0x7f070010;
         /**  Just use standard Pull Down String when pulling up. These can be set for languages which require it 
  Just use standard Pull Down String when pulling up. These can be set for languages which require it 
@@ -361,6 +378,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int research_development_management=0x7f070015;
         public static final int search=0x7f07001b;
         public static final int search_hint=0x7f07001a;
+        public static final int setting=0x7f07000c;
         public static final int synthesize=0x7f070016;
         public static final int system_operation=0x7f070013;
     }
@@ -391,6 +409,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f080001;
+        public static final int setting_textview_style=0x7f080003;
         public static final int viewPagerItemStyle=0x7f080002;
     }
     public static final class styleable {
