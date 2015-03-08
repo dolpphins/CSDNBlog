@@ -9,7 +9,7 @@
     <string name="blog">博客</string>
     <string name="column">专栏</string>
     <string name="experts">博客专家</string>
-    <string name="personality">个人中心</string>
+    <string name="personality">设置</string>
     
     <!-- 博客导航条 -->
     <string name="mobile_development">移动开发</string>
@@ -30,5 +30,8 @@
 	<string name="column_search">专栏搜索</string>
 	<string name="search_hint">请输入关键词</string>
 	<string name="search">搜索</string>
+	
+	<!-- 博客专家 -->
+	<string name="expert_detail">博客专家详情</string>
 	
 </resources>

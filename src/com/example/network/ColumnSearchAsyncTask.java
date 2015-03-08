@@ -67,10 +67,8 @@ public class ColumnSearchAsyncTask extends AsyncTask<String,Void,Void>{
 		if(((Activity)context).getWindow().getDecorView() != null)
 		{
 			InputMethodManager m=(InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);  
-			//m.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
 			m.hideSoftInputFromWindow(column_searching_icon.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 		}
-		
 		column_searching_icon.clearAnimation();
 		column_searching_icon.setVisibility(View.GONE);
 		if(searchResultListTemp == null)

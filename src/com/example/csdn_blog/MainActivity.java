@@ -11,15 +11,19 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.Window;
+import android.widget.FrameLayout;
+import android.widget.GridLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TextView;
@@ -29,6 +33,7 @@ import com.example.blog.BlogOnPageChangeListener;
 import com.example.blog.BlogPagerAdapter;
 import com.example.column.Column;
 import com.example.column.ColumnSearchActivity;
+import com.example.experts.Experts;
 import com.example.util.ColumnListViewAdapter;
 import com.example.util.NewsListViewAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -140,6 +145,69 @@ public class MainActivity extends Activity {
 	private String columnsCacheFileName = "columns";
 	private ImageView column_search_icon = null;//专栏搜索按钮
 	
+	/**
+	 * 
+	 * 博客专家
+	 * 
+	 * */
+	private TextView experts_mobile = null;//移动开发
+	private String expertsMobileUrl = "http://blog.csdn.net/mobile/experts.html";
+	private String expertsMobileCacheFileName = "experts_mobile";
+	private Experts mobileExperts = null;
+	private FrameLayout mobileFrameLayout = null;
+	
+	private TextView experts_web = null;//Web前端
+	private String expertsWebUrl = "http://blog.csdn.net/web/experts.html";
+	private String expertsWebCacheFileName = "experts_web";
+	private Experts webExperts = null;
+	private FrameLayout webFrameLayout = null;
+	
+	private TextView experts_framework = null;//架构设计
+	private String expertsFrameworkUrl = "http://blog.csdn.net/enterprise/experts.html";
+	private String expertsFrameworkCacheFileName = "experts_frame";
+	private Experts frameworkExperts = null;
+	private FrameLayout frameworkFrameLayout = null;
+	
+	private TextView experts_programming = null;//编程语言
+	private String expertsProgrammingUrl = "http://blog.csdn.net/code/experts.html";
+	private String expertsProgrammingCacheFileName = "experts_programming";
+	private Experts programmingExperts = null;
+	private FrameLayout programmingFrameLayout = null;
+	
+	private TextView experts_internet = null;//互联网
+	private String expertsInternetUrl = "http://blog.csdn.net/www/experts.html";
+	private String expertsInternetCacheFileName = "experts_internet";
+	private Experts internetExperts = null;
+	private FrameLayout internetFrameLayout = null;
+	
+	private TextView experts_database = null;//数据库
+	private String expertsDatabaseUrl = "http://blog.csdn.net/database/experts.html";
+	private String expertsDatabaseCacheFileName = "experts_database";
+	private Experts databaseExperts = null;
+	private FrameLayout databaseFrameLayout = null;
+	
+	private TextView experts_system = null;//系统运维
+	private String expertsSystemUrl = "http://blog.csdn.net/system/experts.html";
+	private String expertsSystemCacheFileName = "experts_system";
+	private Experts systemExperts = null;
+	private FrameLayout systemFrameLayout = null;
+	
+	private TextView experts_cloud = null;//云计算
+	private String expertsCloudUrl = "http://blog.csdn.net/cloud/experts.html";
+	private String expertsCloudCacheFileName = "experts_cloud";
+	private Experts cloudExperts = null;
+	private FrameLayout cloudFrameLayout = null;
+	
+	private TextView experts_research = null;//研发管理
+	private String expertsResearchUrl = "http://blog.csdn.net/software/experts.html";
+	private String expertsResearchCacheFileName = "experts_research";
+	private Experts researchExperts = null;
+	private FrameLayout researchFrameLayout = null;
+	
+	private ScrollView experts_grid_scrollview = null;
+
+	private TextView expertCurrentTextView = experts_mobile;//当前选中的分类
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -175,7 +243,7 @@ public class MainActivity extends Activity {
 		tabViews[0] = (LinearLayout) getLayoutInflater().inflate(R.layout.blog_layout, null);
 		tabViews[1] = (LinearLayout) getLayoutInflater().inflate(R.layout.column_layout, null);
 		tabViews[2] = (LinearLayout) getLayoutInflater().inflate(R.layout.experts_layout, null);
-		tabViews[3] = (LinearLayout) getLayoutInflater().inflate(R.layout.personality_layout, null);
+		tabViews[3] = (LinearLayout) getLayoutInflater().inflate(R.layout.setting_layout, null);
 		tabLayoutIds[0] = R.id.tab1;
 		tabLayoutIds[1] = R.id.tab2;
 		tabLayoutIds[2] = R.id.tab3;
@@ -201,9 +269,9 @@ public class MainActivity extends Activity {
 				if(currentSelTab == 0) iv.setBackground(getResources().getDrawable(R.drawable.icon_blog_nor));
 				else if(currentSelTab == 1) iv.setBackground(getResources().getDrawable(R.drawable.icon_column_nor));
 				else if(currentSelTab == 2) iv.setBackground(getResources().getDrawable(R.drawable.icon_experts_nor));
-				else if(currentSelTab == 3) iv.setBackground(getResources().getDrawable(R.drawable.icon_personality_nor));
+				else if(currentSelTab == 3) iv.setBackground(getResources().getDrawable(R.drawable.icon_setting_nor));
 				tv.setTextColor(Color.parseColor("#000000"));
-				
+				//选中博客
 				if(MainActivity.this.getResources().getString(R.string.blog).equals(tabId))
 				{
 					currentSelTab = 0;
@@ -212,6 +280,7 @@ public class MainActivity extends Activity {
 					iv1.setBackground(getResources().getDrawable(R.drawable.icon_blog_sel));
 					tv1.setTextColor(Color.parseColor("#0000ff"));
 				}
+				//选中专栏
 				else if(MainActivity.this.getResources().getString(R.string.column).equals(tabId))
 				{
 					currentSelTab = 1;
@@ -220,7 +289,13 @@ public class MainActivity extends Activity {
 					iv1.setBackground(getResources().getDrawable(R.drawable.icon_column_sel));
 					tv1.setTextColor(Color.parseColor("#0000ff"));
 					
+					//初始化专栏对象
+			        if(columnsNewsListViewAdapter == null) columnsNewsListViewAdapter = new ColumnListViewAdapter(MainActivity.this);
+			        if(column == null) column = new Column(MainActivity.this,columnsNewsListView,columnsBaseUrlString,columnsCacheFileName,10,columnsNewsListViewAdapter);
+			        column.init();
+					
 				}
+				//选中博客专家
 				else if(MainActivity.this.getResources().getString(R.string.experts).equals(tabId))
 				{
 					currentSelTab = 2;
@@ -228,13 +303,24 @@ public class MainActivity extends Activity {
 					TextView tv1 = (TextView) tabViews[currentSelTab].findViewById(R.id.tab_text);
 					iv1.setBackground(getResources().getDrawable(R.drawable.icon_experts_sel));
 					tv1.setTextColor(Color.parseColor("#0000ff"));
+					
+					//初始化博客专家对象
+					if(experts_grid_scrollview.getChildCount()==0) 
+					{
+						experts_grid_scrollview.removeAllViews();
+						experts_grid_scrollview.addView(mobileFrameLayout);
+						expertCurrentTextView = experts_mobile;
+						if(mobileExperts == null) mobileExperts = new Experts(MainActivity.this,mobileFrameLayout);
+						mobileExperts.init(expertsMobileUrl,expertsMobileCacheFileName);
+					}
 				}
+				//选中个人中心
 				else if(MainActivity.this.getResources().getString(R.string.personality).equals(tabId))
 				{
 					currentSelTab = 3;
 					ImageView  iv1 = (ImageView) tabViews[currentSelTab].findViewById(R.id.tab_icon);
 					TextView tv1 = (TextView) tabViews[currentSelTab].findViewById(R.id.tab_text);
-					iv1.setBackground(getResources().getDrawable(R.drawable.icon_personality_sel));
+					iv1.setBackground(getResources().getDrawable(R.drawable.icon_setting_sel));
 					tv1.setTextColor(Color.parseColor("#0000ff"));
 				}
 			}
@@ -382,10 +468,35 @@ public class MainActivity extends Activity {
 				return true;
 			}
 		});
+    	//博客专家
+    	experts_mobile = (TextView) this.findViewById(R.id.experts_mobile);
+    	experts_web = (TextView) this.findViewById(R.id.experts_web);
+    	experts_framework = (TextView) this.findViewById(R.id.experts_framework);
+    	experts_programming = (TextView) this.findViewById(R.id.experts_programming);
+    	experts_internet = (TextView) this.findViewById(R.id.experts_internet);
+    	experts_database = (TextView) this.findViewById(R.id.experts_database);
+    	experts_system = (TextView) this.findViewById(R.id.experts_system);
+    	experts_cloud = (TextView) this.findViewById(R.id.experts_cloud);
+    	experts_research = (TextView) this.findViewById(R.id.experts_research);
+    	
+    	experts_grid_scrollview = (ScrollView) this.findViewById(R.id.experts_grid_scrollview);
+    	
+    	mobileFrameLayout = (FrameLayout) LayoutInflater.from(this).inflate(R.layout.experts_grid_layout, null);
+    	webFrameLayout = (FrameLayout) LayoutInflater.from(this).inflate(R.layout.experts_grid_layout, null);
+    	frameworkFrameLayout = (FrameLayout) LayoutInflater.from(this).inflate(R.layout.experts_grid_layout, null);
+    	programmingFrameLayout = (FrameLayout) LayoutInflater.from(this).inflate(R.layout.experts_grid_layout, null);
+    	internetFrameLayout = (FrameLayout) LayoutInflater.from(this).inflate(R.layout.experts_grid_layout, null);
+    	databaseFrameLayout = (FrameLayout) LayoutInflater.from(this).inflate(R.layout.experts_grid_layout, null);
+    	cloudFrameLayout = (FrameLayout) LayoutInflater.from(this).inflate(R.layout.experts_grid_layout, null);
+    	systemFrameLayout = (FrameLayout) LayoutInflater.from(this).inflate(R.layout.experts_grid_layout, null);
+    	researchFrameLayout = (FrameLayout) LayoutInflater.from(this).inflate(R.layout.experts_grid_layout, null);
+    	
+    	//初始化博客专家各个分类的点击事件
+    	initExpertsClickEvent();
     }
     /**
      * 
-     * 初始化各个对象
+     * 初始化博客选项各个对象
      * 
      * */
     private void initAllObject()
@@ -420,10 +531,140 @@ public class MainActivity extends Activity {
         synthesizeNewsListViewAdapter = new NewsListViewAdapter(this);
         synthesizeBlogNews = new BlogNews(this, synthesizeNewsListView,synthesizeBaseUrlString,synthesizeCacheFileName,9,synthesizeNewsListViewAdapter);
         synthesizeBlogNews.init();
-        //初始化专栏对象
-        columnsNewsListViewAdapter = new ColumnListViewAdapter(this);
-        column = new Column(this,columnsNewsListView,columnsBaseUrlString,columnsCacheFileName,10,columnsNewsListViewAdapter);
-        column.init();
+    }
+    /**
+     * 
+     * 初始化博客专家各个分类的点击事件
+     * 
+     * */
+    private void initExpertsClickEvent()
+    {
+    	//移动开发
+    	experts_mobile.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				expertCurrentTextView.setBackgroundColor(Color.parseColor("#f5f6f8"));
+				expertCurrentTextView = experts_mobile;
+				expertCurrentTextView.setBackgroundColor(Color.parseColor("#ffffff"));
+				
+				if(experts_grid_scrollview.getChildCount()>0) experts_grid_scrollview.removeAllViews();
+				experts_grid_scrollview.addView(mobileFrameLayout);
+				if(mobileExperts == null) mobileExperts = new Experts(MainActivity.this,mobileFrameLayout);
+				mobileExperts.init(expertsMobileUrl,expertsMobileCacheFileName);
+			}
+		});
+    	//Web前端
+    	experts_web.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				expertCurrentTextView.setBackgroundColor(Color.parseColor("#f5f6f8"));
+				expertCurrentTextView = experts_web;
+				expertCurrentTextView.setBackgroundColor(Color.parseColor("#ffffff"));
+				
+				if(experts_grid_scrollview.getChildCount()>0) experts_grid_scrollview.removeAllViews();
+				experts_grid_scrollview.addView(webFrameLayout);
+				if(webExperts == null) webExperts = new Experts(MainActivity.this,webFrameLayout);
+				webExperts.init(expertsWebUrl,expertsWebCacheFileName);
+			}
+		});
+    	//架构设计
+    	experts_framework.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				expertCurrentTextView.setBackgroundColor(Color.parseColor("#f5f6f8"));
+				expertCurrentTextView = experts_framework;
+				expertCurrentTextView.setBackgroundColor(Color.parseColor("#ffffff"));
+				
+				if(experts_grid_scrollview.getChildCount()>0) experts_grid_scrollview.removeAllViews();
+				experts_grid_scrollview.addView(frameworkFrameLayout);
+				if(frameworkExperts == null) frameworkExperts = new Experts(MainActivity.this,frameworkFrameLayout);
+				frameworkExperts.init(expertsFrameworkUrl,expertsFrameworkCacheFileName);
+			}
+		});
+    	//编程语言
+    	experts_programming.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				expertCurrentTextView.setBackgroundColor(Color.parseColor("#f5f6f8"));
+				expertCurrentTextView = experts_programming;
+				expertCurrentTextView.setBackgroundColor(Color.parseColor("#ffffff"));
+				
+				if(experts_grid_scrollview.getChildCount()>0) experts_grid_scrollview.removeAllViews();
+				experts_grid_scrollview.addView(programmingFrameLayout);
+				if(programmingExperts == null) programmingExperts = new Experts(MainActivity.this,programmingFrameLayout);
+				programmingExperts.init(expertsProgrammingUrl,expertsProgrammingCacheFileName);
+			}
+		});
+    	//互联网
+    	experts_internet.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				expertCurrentTextView.setBackgroundColor(Color.parseColor("#f5f6f8"));
+				expertCurrentTextView = experts_internet;
+				expertCurrentTextView.setBackgroundColor(Color.parseColor("#ffffff"));
+				
+				if(experts_grid_scrollview.getChildCount()>0) experts_grid_scrollview.removeAllViews();
+				experts_grid_scrollview.addView(internetFrameLayout);
+				if(internetExperts == null) internetExperts = new Experts(MainActivity.this,internetFrameLayout);
+				internetExperts.init(expertsInternetUrl,expertsInternetCacheFileName);
+			}
+		});
+    	//数据库
+    	experts_database.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				expertCurrentTextView.setBackgroundColor(Color.parseColor("#f5f6f8"));
+				expertCurrentTextView = experts_database;
+				expertCurrentTextView.setBackgroundColor(Color.parseColor("#ffffff"));
+				
+				if(experts_grid_scrollview.getChildCount()>0) experts_grid_scrollview.removeAllViews();
+				experts_grid_scrollview.addView(databaseFrameLayout);
+				if(databaseExperts == null) databaseExperts = new Experts(MainActivity.this,databaseFrameLayout);
+				databaseExperts.init(expertsDatabaseUrl,expertsDatabaseCacheFileName);
+			}
+		});
+    	//系统运维
+    	experts_system.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				expertCurrentTextView.setBackgroundColor(Color.parseColor("#f5f6f8"));
+				expertCurrentTextView = experts_system;
+				expertCurrentTextView.setBackgroundColor(Color.parseColor("#ffffff"));
+				
+				if(experts_grid_scrollview.getChildCount()>0) experts_grid_scrollview.removeAllViews();
+				experts_grid_scrollview.addView(systemFrameLayout);
+				if(systemExperts == null) systemExperts = new Experts(MainActivity.this,systemFrameLayout);
+				systemExperts.init(expertsSystemUrl,expertsSystemCacheFileName);
+			}
+		});
+    	//云计算
+    	experts_cloud.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				expertCurrentTextView.setBackgroundColor(Color.parseColor("#f5f6f8"));
+				expertCurrentTextView = experts_cloud;
+				expertCurrentTextView.setBackgroundColor(Color.parseColor("#ffffff"));
+				
+				if(experts_grid_scrollview.getChildCount()>0) experts_grid_scrollview.removeAllViews();
+				experts_grid_scrollview.addView(cloudFrameLayout);
+				if(cloudExperts == null) cloudExperts = new Experts(MainActivity.this,cloudFrameLayout);
+				cloudExperts.init(expertsCloudUrl,expertsCloudCacheFileName);
+			}
+		});
+    	//研发管理
+    	experts_research.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				expertCurrentTextView.setBackgroundColor(Color.parseColor("#f5f6f8"));
+				expertCurrentTextView = experts_research;
+				expertCurrentTextView.setBackgroundColor(Color.parseColor("#ffffff"));
+				
+				if(experts_grid_scrollview.getChildCount()>0) experts_grid_scrollview.removeAllViews();
+				experts_grid_scrollview.addView(researchFrameLayout);
+				if(researchExperts == null) researchExperts = new Experts(MainActivity.this,researchFrameLayout);
+				researchExperts.init(expertsResearchUrl,expertsResearchCacheFileName);
+			}
+		});
     }
     
     @Override

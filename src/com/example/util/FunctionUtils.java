@@ -87,6 +87,22 @@ public class FunctionUtils {
 		return pictureFileName;
 	}
 	/**
+	 * 
+	 * 由地址得到唯一标识
+	 * 
+	 * @param urlString 某一地址
+	 * 
+	 * @return 唯一标识
+	 * 
+	 * */
+	public static String getIdByUrl(String urlString)
+	{
+		int start = urlString.lastIndexOf("/");
+		String id = urlString.substring(start+1);
+		Log.i(tag,id);
+		return id;
+	}
+	/**
 	 * 读取图片文件缓存
 	 * 
 	 * @param pictureFileName 图片文件名

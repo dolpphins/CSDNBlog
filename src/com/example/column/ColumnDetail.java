@@ -39,7 +39,6 @@ public class ColumnDetail extends BlogNews {
 
 			@Override
 			public void run() {
-				Log.i(tag,"abc");
 				Log.i(tag,"start getData");
 				Log.i(tag,baseUrlString);
 				String html = network.getData(baseUrlString);

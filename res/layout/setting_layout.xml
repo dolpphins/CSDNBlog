@@ -10,7 +10,7 @@
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_gravity="center"
-	    android:background="@drawable/icon_personality_nor"/>
+	    android:background="@drawable/icon_setting_nor"/>
 	<TextView 
 	    android:id="@+id/tab_text"
 	    android:layout_width="wrap_content"

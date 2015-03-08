@@ -1,9 +1,10 @@
 package com.example.network;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.lang.ref.SoftReference;
+import java.util.HashMap;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -11,15 +12,16 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import com.example.util.FunctionUtils;
-
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
+import android.util.Pair;
 import android.widget.ImageView;
+
+import com.example.util.FunctionUtils;
 
 public class PictureAsyncTask extends AsyncTask<String,Void,Bitmap>{
 	private final static String tag = "PictureAsyncTask";
@@ -27,6 +29,9 @@ public class PictureAsyncTask extends AsyncTask<String,Void,Bitmap>{
 	private String pictureFileName;//保存在缓存文件中的图片名
 	private ImageView imageView = null;
 	private String urlString = "";//当前正在获取的图片的地址
+	
+	//图片缓存
+	private static HashMap<String,SoftReference<Bitmap> > bitmapCache = new HashMap<String,SoftReference<Bitmap> >();
 	
 	public PictureAsyncTask(ImageView imageView)
 	{
@@ -39,6 +44,8 @@ public class PictureAsyncTask extends AsyncTask<String,Void,Bitmap>{
 		this.urlString = urlString;
 		pictureFileName = FunctionUtils.getPictureNameByUrl(urlString);
 		Bitmap result = null;
+		//如果内存缓存有该图片
+		if((result = readBitmapFromMemory(pictureFileName)) != null) return result;
 		//如果文件缓存中有该图片
 		if((result = FunctionUtils.readPictureCacheFromFile(pictureFileName,pictureCacheFilePath)) != null) return result; 
 		try {
@@ -63,6 +70,8 @@ public class PictureAsyncTask extends AsyncTask<String,Void,Bitmap>{
 	@Override
 	protected void onPostExecute(Bitmap result) {
 		imageView.setImageBitmap(result);
+		//将获取到的图片保存到内存缓存中
+		saveBitmapToMemory(FunctionUtils.getPictureNameByUrl(urlString),result);
 		//将获取到的图片保存到文件缓存中
 		if(result!=null) savePictureCacheToFile(result);
 		super.onPostExecute(result);
@@ -71,6 +80,68 @@ public class PictureAsyncTask extends AsyncTask<String,Void,Bitmap>{
 	protected void onProgressUpdate(Void... values) {
 		super.onProgressUpdate(values);
 	}
+	/**
+	 * 
+	 * 将位图保存到内存缓存中
+	 * 
+	 * @param pictureFileName 要保存的位图名
+	 * 
+	 * @param bitmap 要保存的位图
+	 * 
+	 * */
+	private void saveBitmapToMemory(String pictureFileName,Bitmap bitmap)
+	{
+		if(bitmapCache.containsKey(pictureFileName))
+		{
+			if(bitmapCache.get(pictureFileName).get() == null)
+			{
+				bitmapCache.put(pictureFileName, new SoftReference<Bitmap>(bitmap));
+				Log.i(tag,"bitmapCache size is "+bitmapCache.size());
+			}
+		}
+		else 
+		{
+			bitmapCache.put(pictureFileName, new SoftReference<Bitmap>(bitmap));
+			Log.i(tag,"1bitmapCache size is "+bitmapCache.size());
+		}
+	}
+	/**
+	 * 
+	 * 从内存缓存中读取一张位图
+	 * 
+	 * @param pictureFileName 要读取的位图名
+	 * 
+	 * */
+	private Bitmap readBitmapFromMemory(String pictureFileName)
+	{
+		try
+		{
+			if(bitmapCache.containsKey(pictureFileName))
+			{
+				Bitmap bitmap = bitmapCache.get(pictureFileName).get();
+				if(bitmap != null) 
+				{
+					Log.i(tag,"the bitmap "+pictureFileName +" in the memeory cache");
+					return bitmap;
+				}
+			}
+			return null;
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+	/**
+	 * 
+	 * 由输入流得到一张位图
+	 * 
+	 * @param inputStream 输入流
+	 * 
+	 * @return 读取图片成功时返回一张位图,失败返回null
+	 * 
+	 * */
 	private Bitmap getBitmap(InputStream inputStream)
 	{
 		try

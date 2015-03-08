@@ -12,4 +12,5 @@ public class News implements Serializable{
 	public String author;//发布者
 	public String publishTime;//发布时间
 	public boolean hasRead = false;//是否已读 
+	public int pageview = 0;//浏览数
 }

@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="14"
         android:targetSdkVersion="18" />
     
     <uses-permission android:name="android.permission.INTERNET" />
@@ -40,6 +40,11 @@
         </activity>
         <activity 
             android:name="com.example.column.ColumnSearchActivity"
+            android:screenOrientation="portrait">
+            
+        </activity>
+        <activity 
+            android:name="com.example.experts.ExpertDetailActivity"
             android:screenOrientation="portrait">
             
         </activity>
