@@ -125,6 +125,7 @@ public class BlogNews {
         		//下拉刷新(获取数据)成功
         		case REQUEST_FINISH_SUCCESS:
         			Log.i(tag,"request success");
+        			Toast.makeText(context, "获取数据成功", Toast.LENGTH_SHORT).show();
         			currentPage = 1;
         			newsListView.onRefreshComplete();//刷新完成
         			if(newsList != null) itemCount = newsList.size();
@@ -136,6 +137,7 @@ public class BlogNews {
         		//下拉刷新(获取数据)失败
         		case REQUEST_FINISH_FAIL:
         			Log.i(tag,"request fail");
+        			Toast.makeText(context, "获取数据失败", Toast.LENGTH_SHORT).show();
         			newsListView.onRefreshComplete();//刷新失败
         			Toast.makeText(context, "加载数据失败", Toast.LENGTH_SHORT);
         			break;

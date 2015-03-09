@@ -33,6 +33,7 @@ public class Column extends BlogNews{
 	@Override
 	protected void getData()
 	{
+		Toast.makeText(context, "正在获取数据", Toast.LENGTH_SHORT).show();
 		new Thread(new Runnable(){
 
 			@Override

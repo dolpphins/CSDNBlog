@@ -82,7 +82,7 @@ public class Network {
 	{
 		try
 		{
-			Log.i(tag,"the url is " + urlString);
+			Log.i(tag,"get data,the url is " + urlString);
 			URL url = new URL(urlString);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			InputStream inputStream = con.getInputStream();

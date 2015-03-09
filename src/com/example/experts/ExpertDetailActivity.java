@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -114,7 +115,7 @@ public class ExpertDetailActivity extends Activity{
 		isLoading = true;
 		ExpertDetailAsyncTask expertDetailAsyncTask = new ExpertDetailAsyncTask(ExpertDetailActivity.this,expert_article_listview,expert_detail_icon,expertDetailList,expertDetailListViewAdapter,expert);
 		expertDetailAsyncTask.init(expert_detail_headpicture, expert_detail_name,expert_detail_pageview,expert_detail_score,expert_detail_rank,expert_detail_original,expert_detail_transshipment,expert_detail_translation);
-		expertDetailAsyncTask.execute(urlString);
+		expertDetailAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, urlString);
 		
 		//FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,FrameLayout.LayoutParams.WRAP_CONTENT);
 		//params.setMargins(screenWidth-10, 0, 0, 0);
@@ -178,7 +179,7 @@ public class ExpertDetailActivity extends Activity{
 							isLoading = true;
 							ExpertDetailAsyncTask expertDetailAsyncTask = new ExpertDetailAsyncTask(ExpertDetailActivity.this,expert_article_listview,expert_detail_icon,expertDetailList,expertDetailListViewAdapter,expert);
 							expertDetailAsyncTask.init(expert_detail_headpicture, expert_detail_name,expert_detail_pageview,expert_detail_score,expert_detail_rank,expert_detail_original,expert_detail_transshipment,expert_detail_translation);
-							expertDetailAsyncTask.execute(urlString);
+							expertDetailAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,urlString);
 						}
 						else
 						{

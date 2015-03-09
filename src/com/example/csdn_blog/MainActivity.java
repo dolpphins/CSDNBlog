@@ -14,6 +14,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -74,7 +75,7 @@ public class MainActivity extends Activity {
 	private ViewPager viewpager = null;
 	public static int currentViewPageeIndex = 0;//当前ViewPager索引
 	private BlogPagerAdapter blogPagerAdapter = null;
-	private BlogOnPageChangeListener blogOnPageChangeListener = null;
+	private OnPageChangeListener blogOnPageChangeListener = null;
 	private List<LinearLayout> blogPagerViews = new ArrayList<LinearLayout>();
 	/**
 	 * 
@@ -250,7 +251,7 @@ public class MainActivity extends Activity {
         //初始化其它控件(如pulltorefresh等)
         initOther();
         //初始化博客各个对象
-        initAllObject();
+        initMobileObject();
     }
     /**
      * 
@@ -316,9 +317,11 @@ public class MainActivity extends Activity {
 					
 					//初始化专栏对象
 			        if(columnsNewsListViewAdapter == null) columnsNewsListViewAdapter = new ColumnListViewAdapter(MainActivity.this);
-			        if(column == null) column = new Column(MainActivity.this,columnsNewsListView,columnsBaseUrlString,columnsCacheFileName,10,columnsNewsListViewAdapter);
-			        column.init();
-					
+			        if(column == null) 
+			        {
+			        	column = new Column(MainActivity.this,columnsNewsListView,columnsBaseUrlString,columnsCacheFileName,10,columnsNewsListViewAdapter);
+			        	column.init();
+			        }
 				}
 				//选中博客专家
 				else if(MainActivity.this.getResources().getString(R.string.experts).equals(tabId))
@@ -427,7 +430,100 @@ public class MainActivity extends Activity {
     	
     	blogPagerAdapter = new BlogPagerAdapter(blogPagerViews);
     	viewpager.setAdapter(blogPagerAdapter);
-    	blogOnPageChangeListener = new BlogOnPageChangeListener(this);
+    	blogOnPageChangeListener = new OnPageChangeListener(){
+    		@Override
+    		public void onPageScrollStateChanged(int arg0) {}
+    		@Override
+    		public void onPageScrolled(int arg0, float arg1, int arg2) {}
+			@Override
+			public void onPageSelected(int index) {
+				MainActivity.this.changeNavigationItem(index);
+   			 	currentViewPageeIndex = index;
+   			 	switch(index)
+   			 	{
+   			 	case 0:
+   			 		if(mobileBlogNews == null)
+   			 		{
+   			 			mobileNewsListViewAdapter = new NewsListViewAdapter(MainActivity.this);
+   			 			mobileBlogNews = new BlogNews(MainActivity.this, mobileNewsListView,mobileBaseUrlString,mobileCacheFileName,0,mobileNewsListViewAdapter);
+   			 			mobileBlogNews.init();
+   			 		}
+   			 		break;
+   			 	case 1:
+   			 		if(webBlogNews == null)
+   			 		{
+   			 		webNewsListViewAdapter = new NewsListViewAdapter(MainActivity.this);
+   			        webBlogNews = new BlogNews(MainActivity.this, webNewsListView,webBaseUrlString,webCacheFileName,1,webNewsListViewAdapter);
+   			        webBlogNews.init();
+			 		}
+   			 		break;
+   			 	case 2:
+   			 		if(frameworkBlogNews == null)
+			 		{
+   			 		frameworkNewsListViewAdapter = new NewsListViewAdapter(MainActivity.this);
+   			        frameworkBlogNews = new BlogNews(MainActivity.this, frameworkNewsListView,frameworkBaseUrlString,frameworkCacheFileName,2,frameworkNewsListViewAdapter);
+   			        frameworkBlogNews.init();
+			 		}
+   			 		break;
+   			 	case 3:
+	   			 	if(programmingBlogNews == null)
+			 		{
+	   			 	programmingNewsListViewAdapter = new NewsListViewAdapter(MainActivity.this);
+	   		        programmingBlogNews = new BlogNews(MainActivity.this, programmingNewsListView,programmingBaseUrlString,programmingCacheFileName,3,programmingNewsListViewAdapter);
+	   		        programmingBlogNews.init();
+			 		}
+   			 		break;
+   			 	case 4:
+	   			 	if(internetBlogNews == null)
+			 		{
+	   			 	internetNewsListViewAdapter = new NewsListViewAdapter(MainActivity.this);
+	   		        internetBlogNews = new BlogNews(MainActivity.this, internetNewsListView,internetBaseUrlString,internetCacheFileName,4,internetNewsListViewAdapter);
+	   		        internetBlogNews.init();
+			 		}
+   			 		break;
+   			 	case 5:
+	   			 	if(databaseBlogNews == null)
+			 		{
+	   			 	databaseNewsListViewAdapter = new NewsListViewAdapter(MainActivity.this);
+	   		        databaseBlogNews = new BlogNews(MainActivity.this, databaseNewsListView,databaseBaseUrlString,databaseCacheFileName,5,databaseNewsListViewAdapter);
+	   		        databaseBlogNews.init();
+			 		}
+   			 		break;
+   			 	case 6:
+	   			 	if(systemBlogNews == null)
+			 		{
+	   			 	systemNewsListViewAdapter = new NewsListViewAdapter(MainActivity.this);
+	   		        systemBlogNews = new BlogNews(MainActivity.this, systemNewsListView,systemBaseUrlString,systemCacheFileName,6,systemNewsListViewAdapter);
+	   		        systemBlogNews.init();
+			 		}
+   			 		break;
+   			 	case 7:
+	   			 	if(cloudBlogNews == null)
+			 		{
+	   			 	cloudNewsListViewAdapter = new NewsListViewAdapter(MainActivity.this);
+	   		        cloudBlogNews = new BlogNews(MainActivity.this, cloudNewsListView,cloudBaseUrlString,cloudCacheFileName,7,cloudNewsListViewAdapter);
+	   		        cloudBlogNews.init();
+			 		}
+   			 		break;
+   			 	case 8:
+	   			 	if(researchBlogNews == null)
+			 		{
+	   			 	researchNewsListViewAdapter = new NewsListViewAdapter(MainActivity.this);
+	   		        researchBlogNews = new BlogNews(MainActivity.this, researchNewsListView,researchBaseUrlString,researchCacheFileName,8,researchNewsListViewAdapter);
+	   		        researchBlogNews.init();
+			 		}
+   			 		break;
+   			 	case 9:
+	   			 	if(synthesizeBlogNews == null)
+			 		{
+	   			 	synthesizeNewsListViewAdapter = new NewsListViewAdapter(MainActivity.this);
+	   		        synthesizeBlogNews = new BlogNews(MainActivity.this, synthesizeNewsListView,synthesizeBaseUrlString,synthesizeCacheFileName,9,synthesizeNewsListViewAdapter);
+	   		        synthesizeBlogNews.init();
+			 		}
+   			 		break;
+   			 	}
+			}
+    	};
     	viewpager.setOnPageChangeListener(blogOnPageChangeListener);
     }
     /**
@@ -523,41 +619,14 @@ public class MainActivity extends Activity {
     }
     /**
      * 
-     * 初始化博客选项各个对象
+     * 初始化博客移动开发对象
      * 
      * */
-    private void initAllObject()
+    private void initMobileObject()
     {
-    	mobileNewsListViewAdapter = new NewsListViewAdapter(this);
-        mobileBlogNews = new BlogNews(this, mobileNewsListView,mobileBaseUrlString,mobileCacheFileName,0,mobileNewsListViewAdapter);
-        mobileBlogNews.init();
-        webNewsListViewAdapter = new NewsListViewAdapter(this);
-        webBlogNews = new BlogNews(this, webNewsListView,webBaseUrlString,webCacheFileName,1,webNewsListViewAdapter);
-        webBlogNews.init();
-        frameworkNewsListViewAdapter = new NewsListViewAdapter(this);
-        frameworkBlogNews = new BlogNews(this, frameworkNewsListView,frameworkBaseUrlString,frameworkCacheFileName,2,frameworkNewsListViewAdapter);
-        frameworkBlogNews.init();
-        programmingNewsListViewAdapter = new NewsListViewAdapter(this);
-        programmingBlogNews = new BlogNews(this, programmingNewsListView,programmingBaseUrlString,programmingCacheFileName,3,programmingNewsListViewAdapter);
-        programmingBlogNews.init();
-        internetNewsListViewAdapter = new NewsListViewAdapter(this);
-        internetBlogNews = new BlogNews(this, internetNewsListView,internetBaseUrlString,internetCacheFileName,4,internetNewsListViewAdapter);
-        internetBlogNews.init();
-        databaseNewsListViewAdapter = new NewsListViewAdapter(this);
-        databaseBlogNews = new BlogNews(this, databaseNewsListView,databaseBaseUrlString,databaseCacheFileName,5,databaseNewsListViewAdapter);
-        databaseBlogNews.init();
-        systemNewsListViewAdapter = new NewsListViewAdapter(this);
-        systemBlogNews = new BlogNews(this, systemNewsListView,systemBaseUrlString,systemCacheFileName,6,systemNewsListViewAdapter);
-        systemBlogNews.init();
-        cloudNewsListViewAdapter = new NewsListViewAdapter(this);
-        cloudBlogNews = new BlogNews(this, cloudNewsListView,cloudBaseUrlString,cloudCacheFileName,7,cloudNewsListViewAdapter);
-        cloudBlogNews.init();
-        researchNewsListViewAdapter = new NewsListViewAdapter(this);
-        researchBlogNews = new BlogNews(this, researchNewsListView,researchBaseUrlString,researchCacheFileName,8,researchNewsListViewAdapter);
-        researchBlogNews.init();
-        synthesizeNewsListViewAdapter = new NewsListViewAdapter(this);
-        synthesizeBlogNews = new BlogNews(this, synthesizeNewsListView,synthesizeBaseUrlString,synthesizeCacheFileName,9,synthesizeNewsListViewAdapter);
-        synthesizeBlogNews.init();
+    	mobileNewsListViewAdapter = new NewsListViewAdapter(MainActivity.this);
+		mobileBlogNews = new BlogNews(MainActivity.this, mobileNewsListView,mobileBaseUrlString,mobileCacheFileName,0,mobileNewsListViewAdapter);
+		mobileBlogNews.init();    
     }
     /**
      * 

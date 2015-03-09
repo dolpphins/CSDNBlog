@@ -2,6 +2,7 @@ package com.example.blog;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -38,7 +39,7 @@ public class BlogDetailActivity extends Activity {
 		
 		//if(!Network.isAvailable(this)) Toast.makeText(this, "Õ¯¬Á≤ªø…”√", Toast.LENGTH_SHORT).show();
         //else new BlogDetailAsyncTask(this,news).execute(news.textUrl);
-		new BlogDetailAsyncTask(this,news,cacheFileName).execute(news.textUrl);
+		new BlogDetailAsyncTask(this,news,cacheFileName).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,news.textUrl);
 		
 		detail_item_back.setOnClickListener(new OnClickListener() {
 			

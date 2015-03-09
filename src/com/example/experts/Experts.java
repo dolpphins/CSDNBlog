@@ -83,6 +83,8 @@ public class Experts {
 				{
 				//获取信息成功
 				case GET_SUCCESS:
+					experts_searching_icon.clearAnimation();
+					experts_searching_icon.setVisibility(View.GONE);
 					updateUI();
 					saveCacheToMemory();//将博客专家信息保存到内存缓存中
 					saveCacheToFile();//将博客专家信息保存到缓存文件中
@@ -90,6 +92,7 @@ public class Experts {
 				//获取信息失败
 				case GET_FAIL:
 					experts_searching_icon.clearAnimation();
+					experts_searching_icon.setVisibility(View.GONE);
 					Toast.makeText(context, "获取信息失败", Toast.LENGTH_SHORT).show();
 					break;
 				}
@@ -373,10 +376,7 @@ public class Experts {
 	 * 
 	 * */
 	public void updateUI()
-	{
-		experts_searching_icon.clearAnimation();
-		experts_searching_icon.setVisibility(View.GONE);
-		
+	{	
 		for(Expert expert:expertsList)
 		{
 			LinearLayout gridItemView = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.expert_item_layout, null);

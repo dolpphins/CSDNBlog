@@ -167,35 +167,37 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int indicator_right_padding=0x7f060000;
     }
     public static final class drawable {
-        public static final int column_search_nor=0x7f020000;
-        public static final int column_search_sel=0x7f020001;
-        public static final int csdn=0x7f020002;
-        public static final int default_ptr_flip=0x7f020003;
-        public static final int default_ptr_rotate=0x7f020004;
-        public static final int defaultpicture=0x7f020005;
-        public static final int head_arrow=0x7f020006;
-        public static final int ic_launcher=0x7f020007;
-        public static final int icon_blog_nor=0x7f020008;
-        public static final int icon_blog_sel=0x7f020009;
-        public static final int icon_column_nor=0x7f02000a;
-        public static final int icon_column_sel=0x7f02000b;
-        public static final int icon_experts_nor=0x7f02000c;
-        public static final int icon_experts_sel=0x7f02000d;
-        public static final int icon_personality_nor=0x7f02000e;
-        public static final int icon_personality_sel=0x7f02000f;
-        public static final int icon_setting_nor=0x7f020010;
-        public static final int icon_setting_sel=0x7f020011;
-        public static final int icon_switch_off=0x7f020012;
-        public static final int icon_switch_on=0x7f020013;
-        public static final int indicator_arrow=0x7f020014;
-        public static final int indicator_bg_bottom=0x7f020015;
-        public static final int indicator_bg_top=0x7f020016;
-        public static final int loading=0x7f020017;
-        public static final int navigationbar_back=0x7f020018;
-        public static final int search_bg=0x7f020019;
-        public static final int search_input_bg=0x7f02001a;
-        public static final int setting_item_bg_nor=0x7f02001b;
-        public static final int setting_item_bg_sel=0x7f02001c;
+        public static final int app_icon=0x7f020000;
+        public static final int column_search_nor=0x7f020001;
+        public static final int column_search_sel=0x7f020002;
+        public static final int csdn=0x7f020003;
+        public static final int default_ptr_flip=0x7f020004;
+        public static final int default_ptr_rotate=0x7f020005;
+        public static final int defaultpicture=0x7f020006;
+        public static final int head_arrow=0x7f020007;
+        public static final int ic_launcher=0x7f020008;
+        public static final int icon_blog_nor=0x7f020009;
+        public static final int icon_blog_sel=0x7f02000a;
+        public static final int icon_column_nor=0x7f02000b;
+        public static final int icon_column_sel=0x7f02000c;
+        public static final int icon_experts_nor=0x7f02000d;
+        public static final int icon_experts_sel=0x7f02000e;
+        public static final int icon_personality_nor=0x7f02000f;
+        public static final int icon_personality_sel=0x7f020010;
+        public static final int icon_setting_nor=0x7f020011;
+        public static final int icon_setting_sel=0x7f020012;
+        public static final int icon_switch_off=0x7f020013;
+        public static final int icon_switch_on=0x7f020014;
+        public static final int indicator_arrow=0x7f020015;
+        public static final int indicator_bg_bottom=0x7f020016;
+        public static final int indicator_bg_top=0x7f020017;
+        public static final int loading=0x7f020018;
+        public static final int navigationbar_back=0x7f020019;
+        public static final int search_bg=0x7f02001a;
+        public static final int search_input_bg=0x7f02001b;
+        public static final int setting_item_bg_nor=0x7f02001c;
+        public static final int setting_item_bg_sel=0x7f02001d;
+        public static final int splash=0x7f02001e;
     }
     public static final class id {
         public static final int action_settings=0x7f050064;
@@ -325,9 +327,10 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int pull_to_refresh_header_vertical=0x7f030015;
         public static final int research_development_management_layout=0x7f030016;
         public static final int setting_layout=0x7f030017;
-        public static final int synthesize_layout=0x7f030018;
-        public static final int system_operation_layout=0x7f030019;
-        public static final int web_layout=0x7f03001a;
+        public static final int splash_layout=0x7f030018;
+        public static final int synthesize_layout=0x7f030019;
+        public static final int system_operation_layout=0x7f03001a;
+        public static final int web_layout=0x7f03001b;
     }
     public static final class menu {
         public static final int main=0x7f090000;

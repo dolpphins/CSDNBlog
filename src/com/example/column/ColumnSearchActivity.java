@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -96,7 +97,8 @@ public class ColumnSearchActivity extends Activity{
 						String urlString = baseUrlString + "?q=" + keywork;
 						if(currentPageIndex>1) urlString += "&page=" + currentPageIndex;
 						isLoading = true;
-						new ColumnSearchAsyncTask(ColumnSearchActivity.this,column_search_result,column_searching_icon,searchResultList,columnListViewAdapter).execute(keywork,urlString);
+						//new ColumnSearchAsyncTask(ColumnSearchActivity.this,column_search_result,column_searching_icon,searchResultList,columnListViewAdapter).execute(keywork,urlString);
+						new ColumnSearchAsyncTask(ColumnSearchActivity.this,column_search_result,column_searching_icon,searchResultList,columnListViewAdapter).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, keywork,urlString);
 					}
 				}
 			}
@@ -118,7 +120,7 @@ public class ColumnSearchActivity extends Activity{
 						if(!isLoading)
 						{
 							isLoading = true;
-							new ColumnSearchAsyncTask(ColumnSearchActivity.this,column_search_result,column_searching_icon,searchResultList,columnListViewAdapter).execute(keywork,urlString);
+							new ColumnSearchAsyncTask(ColumnSearchActivity.this,column_search_result,column_searching_icon,searchResultList,columnListViewAdapter).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, keywork,urlString);
 						}
 						else
 						{
